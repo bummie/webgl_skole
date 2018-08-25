@@ -38,6 +38,7 @@ function initProgramInfo(gl, shaderProgram)
 		program: shaderProgram,
 		attribLocations: {
 			vertexPosition: gl.getAttribLocation(shaderProgram, 'aVertexPosition'),
+			vertexColor: gl.getAttribLocation(shaderProgram, 'aVertexColor')
 		},
 		uniformLocations: {
 			projectionMatrix: gl.getUniformLocation(shaderProgram, 'uProjectionMatrix'),
@@ -76,8 +77,21 @@ function initBuffers(gl)
 		new Float32Array(positions),
 		gl.STATIC_DRAW);
 
+	const colors = 
+	[
+		1.0,  1.0,  1.0,  1.0,    // white
+		1.0,  0.0,  0.0,  1.0,    // red
+		0.0,  1.0,  0.0,  1.0,    // green
+		0.0,  0.0,  1.0,  1.0,    // blue
+	];
+	
+	const colorBuffer = gl.createBuffer();
+	gl.bindBuffer(gl.ARRAY_BUFFER, colorBuffer);
+	gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(colors), gl.STATIC_DRAW);
+
 	return {
-		position: positionBuffer,
+	position: positionBuffer,
+	color: colorBuffer,
 	};
 }
 
@@ -89,8 +103,6 @@ function initBuffers(gl)
  */
 function drawScene(gl, programInfo, buffers, deltatime) 
 {
-	if(gl === undefined) { console.log("gl is undefined yo"); }
-
 	gl.clearColor(0.0, 0.0, 0.0, 1.0); // Clear to black, fully opaque
 	gl.clearDepth(1.0); // Clear everything
 	gl.enable(gl.DEPTH_TEST); // Enable depth testing
@@ -107,7 +119,8 @@ function drawScene(gl, programInfo, buffers, deltatime)
 	// and we only want to see objects between 0.1 units
 	// and 100 units away from the camera.
 
-	const fieldOfView = Math.floor((Math.random() * 100) + 1) * Math.PI / 180; // in radians
+	//const fieldOfView = Math.floor((Math.random() * 100) + 95) * Math.PI / 180; // in radians
+	const fieldOfView = 45 * Math.PI / 180; // in radians
 	const aspect = gl.canvas.clientWidth / gl.canvas.clientHeight;
 	const zNear = 0.1;
 	const zFar = 100.0;
@@ -154,6 +167,25 @@ function drawScene(gl, programInfo, buffers, deltatime)
 
 		gl.enableVertexAttribArray(
 			programInfo.attribLocations.vertexPosition);
+	}
+
+	// Draw color
+	{
+		const numComponents = 4;
+		const type = gl.FLOAT;
+		const normalize = false;
+		const stride = 0;
+		const offset = 0;
+		gl.bindBuffer(gl.ARRAY_BUFFER, buffers.color);
+		gl.vertexAttribPointer(
+			programInfo.attribLocations.vertexColor,
+			numComponents,
+			type,
+			normalize,
+			stride,
+			offset);
+		gl.enableVertexAttribArray(
+			programInfo.attribLocations.vertexColor);
 	}
 
 	// Tell WebGL to use our program when drawing
