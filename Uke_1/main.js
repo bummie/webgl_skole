@@ -1,7 +1,5 @@
 main();
 
-var then = 0;
-
 function main() 
 {
 	const canvas = document.querySelector("#glCanvas");
@@ -13,31 +11,22 @@ function main()
 	}
 	const shaderProgram = initShaderProgram(gl);
 	const programInfo = initProgramInfo(gl, shaderProgram);
-	let buffers = initBuffers(gl);
+	const buffers = initBuffers(gl);
 
-	render(Date.now(), gl, programInfo, buffers);
+	var then = 0;
+	function render(now) 
+	{
+		now *= 0.001;  // convert to seconds
+		const deltaTime = now - then;
+		then = now;
+
+		drawScene(gl, programInfo, buffers, deltaTime);
+
+		requestAnimationFrame(render);
+	}
+	requestAnimationFrame(render);
 }
 
-/**
- * Simple render loop
- * @param {*} gl 
- * @param {*} programInfo 
- * @param {*} buffer 
- */
-
-function render(now, gl, programInfo, buffers) 
-{
-  now *= 0.001;  // convert to seconds
-  const deltaTime = now - then;
-  then = now;
-
-  drawScene(gl, programInfo, buffers, deltaTime);
-
-  requestAnimationFrame(function (gl, programInfo, buffers)
-						{
-							render(Date.now(), gl, programInfo, buffers);
-						});
-}
 
 /**
  * Initiates Program Info
