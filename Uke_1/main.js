@@ -1,10 +1,11 @@
 main();
 
+var then = 0;
 
-function main() {
+function main() 
+{
 	const canvas = document.querySelector("#glCanvas");
 	const gl = canvas.getContext("webgl");
-	const RUNNING = true;
 
 	if (gl === null) {
 		alert("Unable to initialize WebGL. Your browser or machine may not support it.");
@@ -12,17 +13,38 @@ function main() {
 	}
 	const shaderProgram = initShaderProgram(gl);
 	const programInfo = initProgramInfo(gl, shaderProgram);
-	const buffer = initBuffers(gl);
+	let buffers = initBuffers(gl);
 
+	render(Date.now(), gl, programInfo, buffers);
+}
 
-	drawScene(gl, programInfo, buffer);
+/**
+ * Simple render loop
+ * @param {*} gl 
+ * @param {*} programInfo 
+ * @param {*} buffer 
+ */
+
+function render(now, gl, programInfo, buffers) 
+{
+  now *= 0.001;  // convert to seconds
+  const deltaTime = now - then;
+  then = now;
+
+  drawScene(gl, programInfo, buffers, deltaTime);
+
+  requestAnimationFrame(function (gl, programInfo, buffers)
+						{
+							render(Date.now(), gl, programInfo, buffers);
+						});
 }
 
 /**
  * Initiates Program Info
  * @param {*} gl 
  */
-function initProgramInfo(gl, shaderProgram) {
+function initProgramInfo(gl, shaderProgram) 
+{
 	return {
 		program: shaderProgram,
 		attribLocations: {
@@ -39,8 +61,8 @@ function initProgramInfo(gl, shaderProgram) {
  * Init buffer
  * @param {*} gl 
  */
-function initBuffers(gl) {
-
+function initBuffers(gl) 
+{
 	// Create a buffer for the square's positions.
 
 	const positionBuffer = gl.createBuffer();
@@ -76,7 +98,10 @@ function initBuffers(gl) {
  * @param {*} programInfo 
  * @param {*} buffers 
  */
-function drawScene(gl, programInfo, buffers) {
+function drawScene(gl, programInfo, buffers, deltatime) 
+{
+	if(gl === undefined) { console.log("gl is undefined yo"); }
+
 	gl.clearColor(0.0, 0.0, 0.0, 1.0); // Clear to black, fully opaque
 	gl.clearDepth(1.0); // Clear everything
 	gl.enable(gl.DEPTH_TEST); // Enable depth testing
@@ -93,7 +118,7 @@ function drawScene(gl, programInfo, buffers) {
 	// and we only want to see objects between 0.1 units
 	// and 100 units away from the camera.
 
-	const fieldOfView = 45 * Math.PI / 180; // in radians
+	const fieldOfView = Math.floor((Math.random() * 100) + 1) * Math.PI / 180; // in radians
 	const aspect = gl.canvas.clientWidth / gl.canvas.clientHeight;
 	const zNear = 0.1;
 	const zFar = 100.0;
@@ -127,7 +152,9 @@ function drawScene(gl, programInfo, buffers) {
 		const stride = 0; // how many bytes to get from one set of values to the next
 		// 0 = use type and numComponents above
 		const offset = 0; // how many bytes inside the buffer to start from
+
 		gl.bindBuffer(gl.ARRAY_BUFFER, buffers.position);
+
 		gl.vertexAttribPointer(
 			programInfo.attribLocations.vertexPosition,
 			numComponents,
@@ -135,6 +162,7 @@ function drawScene(gl, programInfo, buffers) {
 			normalize,
 			stride,
 			offset);
+
 		gl.enableVertexAttribArray(
 			programInfo.attribLocations.vertexPosition);
 	}
@@ -149,14 +177,13 @@ function drawScene(gl, programInfo, buffers) {
 		programInfo.uniformLocations.projectionMatrix,
 		false,
 		projectionMatrix);
+
 	gl.uniformMatrix4fv(
 		programInfo.uniformLocations.modelViewMatrix,
 		false,
 		modelViewMatrix);
 
-	{
-		const offset = 0;
-		const vertexCount = 4;
-		gl.drawArrays(gl.TRIANGLE_STRIP, offset, vertexCount);
-	}
+	const offset = 0;
+	const vertexCount = 4;
+	gl.drawArrays(gl.TRIANGLE_STRIP, offset, vertexCount);
 }
