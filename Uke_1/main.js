@@ -27,7 +27,6 @@ function main()
 	requestAnimationFrame(render);
 }
 
-
 /**
  * Initiates Program Info
  * @param {*} gl 
