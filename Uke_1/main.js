@@ -63,8 +63,12 @@ function initBuffers(gl)
 
 	// Now create an array of positions for the square.
 
-	const positions = [-1.0, 1.0,
-		1.0, 1.0, -1.0, -1.0,
+	const positions =
+	[
+		//-1.0, 1.0,
+		0, 1.0,
+		//1.0, 1.0,
+		-1.0, -1.0,
 		1.0, -1.0,
 	];
 
@@ -204,6 +208,6 @@ function drawScene(gl, programInfo, buffers, deltatime)
 		modelViewMatrix);
 
 	const offset = 0;
-	const vertexCount = 4;
+	const vertexCount = 3;
 	gl.drawArrays(gl.TRIANGLE_STRIP, offset, vertexCount);
 }
