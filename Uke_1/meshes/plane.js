@@ -1,7 +1,7 @@
 
 function Quad()
 {
-    this.translation = [ 1.5, 0, 0 ];
+    this.position = [ 0, 0, 0 ];
     this.rotation = [ 0, 0, 0 ];
     this.scale = [ 1, 1, 0 ];
 
@@ -73,7 +73,7 @@ function Quad()
         
         // Apply translation to the MESH yo
         var translationLocation = gl.getUniformLocation(programInfo.program, "translate");
-        gl.uniform4f(translationLocation, this.translation[0], this.translation[1], this.translation[2], 0);
+        gl.uniform4f(translationLocation, this.position[0], this.position[1], this.position[2], 0);
        
         gl.drawArrays(gl.TRIANGLE_STRIP, this.offset, this.vertexCount);
     }

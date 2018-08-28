@@ -1,6 +1,6 @@
 main();
 
-let quadObjects = [ new Quad(), new Quad(), new Quad() ]; 
+let quadObjects = [ new Quad(), new Quad(), new Quad(), new Quad(), new Quad(), new Quad(), new Quad(), new Quad(), new Quad(), new Quad() ]; 
 
 function main() 
 {
@@ -97,13 +97,22 @@ function drawScene(gl, programInfo, deltatime)
 		[-0.0, 0.0, -6.0]); // amount to translate
 	
 	// Draw objects in array
+	let i = 0;
 	quadObjects.forEach(function(quad) 
 	{
+		let frequency = 0.006,
+			amplitude = 4,
+			delay = 50;
+			
 		// Change position of object
-		quad.translation = [ Math.floor((Math.random() * 6) - 3),  Math.floor((Math.random() * 6) - 3), -5 ];
+		let x = (Math.sin((Date.now() - i * delay) * frequency) * amplitude);
+		let y = -(Math.sin((Date.now() - i * delay) * frequency/2) * amplitude);
+		
+		quad.position = [ x,  y, -5 ];
 
 		// Draw our objects
 		quad.draw(gl, programInfo, projectionMatrix, modelViewMatrix);
+		i++;
 	});
 	
 }
