@@ -1,9 +1,9 @@
 
 function Quad()
 {
-    this.translation = [ 0, 0, 0 ];
+    this.translation = [ 1.5, 0, 0 ];
     this.rotation = [ 0, 0, 0 ];
-    this.scale = [ 1, 1, 1 ];
+    this.scale = [ 1, 1, 0 ];
 
     this.color = [ 1, 0, 0, 1];
 
@@ -14,7 +14,6 @@ function Quad()
     {
 
         buffers = this.initBuffer(gl);
-
         {
             const numComponents = 2; // pull out 2 values per iteration
             const type = gl.FLOAT; // the data in the buffer is 32bit floats
@@ -71,10 +70,18 @@ function Quad()
             programInfo.uniformLocations.modelViewMatrix,
             false,
             modelViewMatrix);
-    
+        
+        // Apply translation to the MESH yo
+        var translationLocation = gl.getUniformLocation(programInfo.program, "translate");
+        gl.uniform4f(translationLocation, this.translation[0], this.translation[1], this.translation[2], 0);
+       
         gl.drawArrays(gl.TRIANGLE_STRIP, this.offset, this.vertexCount);
     }
 
+    /**
+     * Init the buffer containing data ment for the GPU yo
+     * @param {*} gl 
+     */
     this.initBuffer = function(gl)
     {
         // Create a buffer for the square's positions.

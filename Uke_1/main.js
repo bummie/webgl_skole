@@ -1,5 +1,7 @@
 main();
 
+let quadObjects = [ new Quad(), new Quad(), new Quad() ]; 
+
 function main() 
 {
 	const canvas = document.querySelector("#glCanvas");
@@ -93,8 +95,15 @@ function drawScene(gl, programInfo, deltatime)
 	mat4.translate(modelViewMatrix, // destination matrix
 		modelViewMatrix, // matrix to translate
 		[-0.0, 0.0, -6.0]); // amount to translate
+	
+	// Draw objects in array
+	quadObjects.forEach(function(quad) 
+	{
+		// Change position of object
+		quad.translation = [ Math.floor((Math.random() * 6) - 3),  Math.floor((Math.random() * 6) - 3), -5 ];
 
-	// Draw our objects
-	let quadObject = new Quad();
-	quadObject.draw(gl, programInfo, projectionMatrix, modelViewMatrix);
+		// Draw our objects
+		quad.draw(gl, programInfo, projectionMatrix, modelViewMatrix);
+	});
+	
 }

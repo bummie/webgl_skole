@@ -8,10 +8,11 @@ const vsSource = `
     uniform mat4 uProjectionMatrix;
 
     varying lowp vec4 vColor;
-
+    uniform vec4 translate;
+    
     void main(void) 
     {
-        gl_Position = uProjectionMatrix * uModelViewMatrix * aVertexPosition;
+        gl_Position = uProjectionMatrix * uModelViewMatrix * (aVertexPosition + translate);
         vColor = aVertexColor;
     }
   `;
