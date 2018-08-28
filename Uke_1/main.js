@@ -105,8 +105,8 @@ function drawScene(gl, programInfo, deltatime)
 			delay = 50;
 			
 		// Change position of object
-		let x = (Math.sin((Date.now() - i * delay) * frequency) * amplitude);
-		let y = -(Math.sin((Date.now() - i * delay) * frequency/2) * amplitude);
+		let x = (Math.sin((Date.now() - i * delay) * frequency/6) * amplitude);
+		let y = -(Math.sin((Date.now() - i * delay) * frequency) * amplitude);
 		
 		quad.position = [ x,  y, -5 ];
 
