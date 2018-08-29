@@ -1,4 +1,3 @@
-
 function Quad()
 {
     this.position = [ 0, 0, 0 ];
@@ -10,6 +9,13 @@ function Quad()
     this.vertexCount = 4;
     this.offset = 0;
 
+    /**
+     * Draws the Quad to the canvas
+     * @param {*} gl 
+     * @param {*} programInfo 
+     * @param {*} projectionMatrix 
+     * @param {*} modelViewMatrix 
+     */
     this.draw = function(gl, programInfo, projectionMatrix, modelViewMatrix)
     {
 
@@ -72,8 +78,7 @@ function Quad()
             modelViewMatrix);
         
         // Apply translation to the MESH yo
-        var translationLocation = gl.getUniformLocation(programInfo.program, "translate");
-        gl.uniform4f(translationLocation, this.position[0], this.position[1], this.position[2], 0);
+        gl.uniform4f(programInfo.uniformLocations.translate, this.position[0], this.position[1], this.position[2], 0);
        
         gl.drawArrays(gl.TRIANGLE_STRIP, this.offset, this.vertexCount);
     }
