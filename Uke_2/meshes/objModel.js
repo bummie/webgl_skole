@@ -1,11 +1,13 @@
 function ObjModel(vList, fList)
 {
-	this.v = vList;
-    this.position = [ 0, 0, 0 ];
-    this.rotation = [ 0, 0, 0 ];
-    this.scale = [ 1, 1, 1 ];
+	this.vertexList = vList;
+	this.faceList = fList;
 
-    this.vertexCount = vList.length/3;
+    this.position = [ 0, 0, -10 ];
+    this.rotation = [ 0, 0, 0 ];
+    this.scale = [ .01, .01, .01 ];
+
+    this.triangleCount = vList.length/3;
 	this.offset = 0;
 		
     /**
@@ -41,30 +43,9 @@ function ObjModel(vList, fList)
                 normalize,
                 stride,
                 offset);
-    
-            gl.enableVertexAttribArray(
-                programInfo.attribLocations.vertexPosition);
+            gl.enableVertexAttribArray(programInfo.attribLocations.vertexPosition);
         }
-    
-        // Draw color
-        {
-            const numComponents = 4;
-            const type = gl.FLOAT;
-            const normalize = false;
-            const stride = 0;
-            const offset = 0;
-            gl.bindBuffer(gl.ARRAY_BUFFER, buffers.color);
-            gl.vertexAttribPointer(
-                programInfo.attribLocations.vertexColor,
-                numComponents,
-                type,
-                normalize,
-                stride,
-                offset);
-            gl.enableVertexAttribArray(
-                programInfo.attribLocations.vertexColor);
-		}
-		
+
 		// Tell WebGL which indices to use to index the vertices
 		gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, buffers.faceBuffer);
 
@@ -73,7 +54,7 @@ function ObjModel(vList, fList)
         gl.uniformMatrix4fv(programInfo.uniformLocations.modelViewMatrix, false, modelViewMatrix);
                		
 		const type = gl.UNSIGNED_SHORT;
-		gl.drawElements(gl.TRIANGLES, this.vertexCount, type, this.offset);
+		gl.drawElements(gl.TRIANGLES, this.triangleCount, type, this.offset);
     }
 
     /**
@@ -84,27 +65,14 @@ function ObjModel(vList, fList)
     {
         const positionBuffer = gl.createBuffer();
         gl.bindBuffer(gl.ARRAY_BUFFER, positionBuffer);
-        gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(vList), gl.STATIC_DRAW);
+        gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(this.vertexList), gl.STATIC_DRAW);
 
-        const colors = 
-        [
-            1.0,  1.0,  1.0,  1.0,    // white
-            1.0,  0.0,  0.0,  1.0,    // red
-            0.0,  1.0,  0.0,  1.0,    // green
-            0.0,  0.0,  1.0,  1.0,    // blue
-        ];
-        
-        const colorBuffer = gl.createBuffer();
-        gl.bindBuffer(gl.ARRAY_BUFFER, colorBuffer);
-        gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(colors), gl.STATIC_DRAW);
-		
 		const indexBuffer = gl.createBuffer();
 		gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, indexBuffer);
-		gl.bufferData(gl.ELEMENT_ARRAY_BUFFER, new Uint16Array(fList), gl.STATIC_DRAW);
+		gl.bufferData(gl.ELEMENT_ARRAY_BUFFER, new Uint16Array(this.faceList), gl.STATIC_DRAW);
 
         return {
        		vertexBuffer: positionBuffer,
-			color: colorBuffer,
 			faceBuffer: indexBuffer
         };
     }
