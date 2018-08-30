@@ -1,6 +1,6 @@
 function SceneRenderer()
 {
-	let quadObjects;
+	let sceneObjects;
 	let shaderHandler = new ShaderHandler();
 	const canvas = document.querySelector("#glCanvas");
 	const gl = canvas.getContext("webgl");
@@ -19,7 +19,21 @@ function SceneRenderer()
 
 		shaderProgram = shaderHandler.initShaderProgram(gl);
 		programInfo = this.initProgramInfo(gl, shaderProgram);
-		quadObjects = [ new Quad(), new Quad(), new Quad(), new Quad(), new Quad(), new Quad(), new Quad(), new Quad(), new Quad(), new Quad() ]; 
+		sceneObjects = [];
+
+		const objLocation = './models/Armadillo.obj';
+		let ioTest = new IOHandler();
+		ioTest.loadFile(objLocation, loadVertices );
+	}
+
+	/**
+	 * Callback
+	 * @param {*} obj 
+	 */
+	function loadVertices(obj)
+	{
+		sceneObjects.push(new ObjModel(obj.vertexList, obj.faceList));
+		console.log(new ObjModel(obj.vertexList, obj.faceList));
 	}
 
 	/**
@@ -100,8 +114,9 @@ function SceneRenderer()
 
 		// Draw objects in array
 		let i = 0;
-		quadObjects.forEach(function(quad) 
+		sceneObjects.forEach(function(object) 
 		{
+			/*
 			let frequency = 0.006,
 				amplitude = 4,
 				delay = 50;
@@ -111,10 +126,12 @@ function SceneRenderer()
 			let y = -(Math.sin((Date.now() - i * delay) * frequency) * amplitude);
 			
 			quad.position = [ x,  y, -12 ];
+			*/
 
 			// Draw our objects
-			quad.draw(gl, programInfo, projectionMatrix);
-			i++;
+			object.draw(gl, programInfo, projectionMatrix);
+			
+			//i++;
 		});	
 	}
 }

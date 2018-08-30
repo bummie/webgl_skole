@@ -1,14 +1,13 @@
-function ObjModel()
+function ObjModel(vList, fList)
 {
+	this.v = vList;
     this.position = [ 0, 0, 0 ];
     this.rotation = [ 0, 0, 0 ];
-    this.scale = [ 1, 1, 0 ];
+    this.scale = [ 1, 1, 1 ];
 
-    this.color = [ 1, 0, 0, 1];
-
-    this.vertexCount = 4;
-    this.offset = 0;
-
+    this.vertexCount = vList.length/3;
+	this.offset = 0;
+		
     /**
      * Draws the Quad to the canvas
      * @param {*} gl 
@@ -16,19 +15,24 @@ function ObjModel()
      * @param {*} projectionMatrix 
      * @param {*} modelViewMatrix 
      */
-    this.draw = function(gl, programInfo, projectionMatrix, modelViewMatrix)
+    this.draw = function(gl, programInfo, projectionMatrix)
     {
+		const modelViewMatrix = mat4.create();
 
+		mat4.translate(modelViewMatrix, modelViewMatrix, this.position); 
+		//mat4.rotate(modelViewMatrix, modelViewMatrix, this.rotation);
+		mat4.scale(modelViewMatrix, modelViewMatrix, this.scale);
+		
         buffers = this.initBuffer(gl);
         {
-            const numComponents = 2; // pull out 2 values per iteration
+            const numComponents = 3; // pull out 2 values per iteration
             const type = gl.FLOAT; // the data in the buffer is 32bit floats
             const normalize = false; // don't normalize
             const stride = 0; // how many bytes to get from one set of values to the next
             // 0 = use type and numComponents above
             const offset = 0; // how many bytes inside the buffer to start from
     
-            gl.bindBuffer(gl.ARRAY_BUFFER, buffers.position);
+            gl.bindBuffer(gl.ARRAY_BUFFER, buffers.vertexBuffer);
     
             gl.vertexAttribPointer(
                 programInfo.attribLocations.vertexPosition,
@@ -59,26 +63,17 @@ function ObjModel()
                 offset);
             gl.enableVertexAttribArray(
                 programInfo.attribLocations.vertexColor);
-        }
-    
+		}
+		
+		// Tell WebGL which indices to use to index the vertices
+		gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, buffers.faceBuffer);
 
-    
         // Set the shader uniforms
-    
-        gl.uniformMatrix4fv(
-            programInfo.uniformLocations.projectionMatrix,
-            false,
-            projectionMatrix);
-    
-        gl.uniformMatrix4fv(
-            programInfo.uniformLocations.modelViewMatrix,
-            false,
-            modelViewMatrix);
-        
-        // Apply translation to the MESH yo
-        gl.uniform4f(programInfo.uniformLocations.translate, this.position[0], this.position[1], this.position[2], 0);
-       
-        gl.drawArrays(gl.TRIANGLE_STRIP, this.offset, this.vertexCount);
+        gl.uniformMatrix4fv(programInfo.uniformLocations.projectionMatrix, false, projectionMatrix);
+        gl.uniformMatrix4fv(programInfo.uniformLocations.modelViewMatrix, false, modelViewMatrix);
+               		
+		const type = gl.UNSIGNED_SHORT;
+		gl.drawElements(gl.TRIANGLES, this.vertexCount, type, this.offset);
     }
 
     /**
@@ -87,32 +82,9 @@ function ObjModel()
      */
     this.initBuffer = function(gl)
     {
-        // Create a buffer for the square's positions.
-
         const positionBuffer = gl.createBuffer();
-
-        // Select the positionBuffer as the one to apply buffer
-        // operations to from here out.
-
         gl.bindBuffer(gl.ARRAY_BUFFER, positionBuffer);
-
-        // Now create an array of positions for the square.
-
-        const positions =
-        [
-            -1.0, 1.0,
-            1.0, 1.0,
-            -1.0, -1.0,
-            1.0, -1.0,
-        ];
-
-        // Now pass the list of positions into WebGL to build the
-        // shape. We do this by creating a Float32Array from the
-        // JavaScript array, then use it to fill the current buffer.
-
-        gl.bufferData(gl.ARRAY_BUFFER,
-            new Float32Array(positions),
-            gl.STATIC_DRAW);
+        gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(vList), gl.STATIC_DRAW);
 
         const colors = 
         [
@@ -125,10 +97,15 @@ function ObjModel()
         const colorBuffer = gl.createBuffer();
         gl.bindBuffer(gl.ARRAY_BUFFER, colorBuffer);
         gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(colors), gl.STATIC_DRAW);
+		
+		const indexBuffer = gl.createBuffer();
+		gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, indexBuffer);
+		gl.bufferData(gl.ELEMENT_ARRAY_BUFFER, new Uint16Array(fList), gl.STATIC_DRAW);
 
         return {
-        position: positionBuffer,
-        color: colorBuffer,
+       		vertexBuffer: positionBuffer,
+			color: colorBuffer,
+			faceBuffer: indexBuffer
         };
     }
 }
