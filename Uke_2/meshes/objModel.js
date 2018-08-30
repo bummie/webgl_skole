@@ -3,9 +3,9 @@ function ObjModel(vList, fList)
 	this.vertexList = vList;
 	this.faceList = fList;
 
-    this.position = [ 0, 0, -10 ];
+    this.position = [ 0, 0, -1 ];
     this.rotation = [ 0, 0, 0 ];
-    this.scale = [ .01, .01, .01 ];
+    this.scale = [ .1, .1, .1 ];
 
     this.triangleCount = vList.length/3;
 	this.offset = 0;
@@ -22,7 +22,7 @@ function ObjModel(vList, fList)
 		const modelViewMatrix = mat4.create();
 
 		mat4.translate(modelViewMatrix, modelViewMatrix, this.position); 
-		mat4.rotate(modelViewMatrix, modelViewMatrix, this.rotation[0], [1, 0, 0]);
+		mat4.rotate(modelViewMatrix, modelViewMatrix, this.rotation[0], [0, 1, 0]);
 		mat4.scale(modelViewMatrix, modelViewMatrix, this.scale);
 		
         buffers = this.initBuffer(gl);

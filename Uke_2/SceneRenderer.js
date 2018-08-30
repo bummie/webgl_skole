@@ -8,6 +8,8 @@ function SceneRenderer()
 	let programInfo = null;
 
 	let then = 0;
+	//const objLocation = './models/Armadillo.obj';
+	const objLocation = './models/terning.obj';
 
 	this.main = function() 
 	{
@@ -21,7 +23,6 @@ function SceneRenderer()
 		programInfo = this.initProgramInfo(gl, shaderProgram);
 		sceneObjects = [];
 
-		const objLocation = './models/Armadillo.obj';
 		let ioTest = new IOHandler();
 		ioTest.loadFile(objLocation, loadVertices );
 	}
