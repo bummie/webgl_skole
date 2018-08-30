@@ -22,7 +22,7 @@ function ObjModel(vList, fList)
 		const modelViewMatrix = mat4.create();
 
 		mat4.translate(modelViewMatrix, modelViewMatrix, this.position); 
-		//mat4.rotate(modelViewMatrix, modelViewMatrix, this.rotation);
+		mat4.rotate(modelViewMatrix, modelViewMatrix, this.rotation[0], [1, 0, 0]);
 		mat4.scale(modelViewMatrix, modelViewMatrix, this.scale);
 		
         buffers = this.initBuffer(gl);

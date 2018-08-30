@@ -113,25 +113,11 @@ function SceneRenderer()
         gl.useProgram(programInfo.program);
 
 		// Draw objects in array
-		let i = 0;
 		sceneObjects.forEach(function(object) 
 		{
-			/*
-			let frequency = 0.006,
-				amplitude = 4,
-				delay = 50;
-				
-			// Change position of object
-			let x = (Math.sin((Date.now() - i * delay) * frequency/6) * amplitude);
-			let y = -(Math.sin((Date.now() - i * delay) * frequency) * amplitude);
-			
-			quad.position = [ x,  y, -12 ];
-			*/
-
+			object.rotation[0] += deltatime;
 			// Draw our objects
 			object.draw(gl, programInfo, projectionMatrix);
-			
-			//i++;
 		});	
 	}
 }
