@@ -1,12 +1,14 @@
 function IOHandler()
 {
-    const objLocation = './models/Armadillo.obj';
-
-    this.loadFile = function()
+	/**
+	 * 
+	 * @param {*} callback 
+	 */
+    this.loadFile = function(modelPath, callback)
     {
-       fetch(objLocation)
+       fetch(modelPath)
        .then(response => response.text())
-       .then(text => this.parseObj(text));
+       .then(text => callback(this.parseObj(text)));
     }
 
     /**
@@ -15,14 +17,14 @@ function IOHandler()
     this.parseObj = function(objFile)
     {
       let objFileSplit = objFile.split(/\r?\n/g);
-      let vList = [];
-      let fList = [];
+      let vList = [],
+          fList = [];
 
       let vertexDataCount = 3;
 
       objFileSplit.forEach(line =>
       {
-        let lineSplit = line.split(' ');
+    	let lineSplit = line.split(' ');
         
         switch(lineSplit[0] )
         {
@@ -30,18 +32,19 @@ function IOHandler()
 
             for(let i = 1; i <= vertexDataCount; i++)
             {
-              vList.push(lineSplit[i]);
+              vList.push(parseFloat(lineSplit[i]));
             };
 
           break;
 
           case 'f':
-
+			for(let i = 1; i <= vertexDataCount; i++)
+			{
+				fList.push(parseInt(lineSplit[i].split('//')[0]));
+			};
           break;
         } 
       });
-
-      console.log(vList[0] + " " + vList[1] + " " + vList[2]);
       
       return {
         vertexList: vList,

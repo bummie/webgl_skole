@@ -2,7 +2,7 @@ function Quad()
 {
     this.position = [ 0, 0, 0 ];
     this.rotation = [ 0, 0, 0 ];
-    this.scale = [ 1, 1, 0 ];
+    this.scale = [ 1, 1, 1 ];
 
     this.color = [ 1, 0, 0, 1];
 
@@ -16,9 +16,14 @@ function Quad()
      * @param {*} projectionMatrix 
      * @param {*} modelViewMatrix 
      */
-    this.draw = function(gl, programInfo, projectionMatrix, modelViewMatrix)
+    this.draw = function(gl, programInfo, projectionMatrix)
     {
+		const modelViewMatrix = mat4.create();
 
+		mat4.translate(modelViewMatrix, modelViewMatrix, this.position); 
+		//mat4.rotate(modelViewMatrix, modelViewMatrix, this.rotation);
+		mat4.scale(modelViewMatrix, modelViewMatrix, this.scale);
+		
         buffers = this.initBuffer(gl);
         {
             const numComponents = 2; // pull out 2 values per iteration
@@ -59,10 +64,7 @@ function Quad()
                 offset);
             gl.enableVertexAttribArray(
                 programInfo.attribLocations.vertexColor);
-        }
-    
-
-    
+        }    
         // Set the shader uniforms
     
         gl.uniformMatrix4fv(
@@ -74,10 +76,7 @@ function Quad()
             programInfo.uniformLocations.modelViewMatrix,
             false,
             modelViewMatrix);
-        
-        // Apply translation to the MESH yo
-        gl.uniform4f(programInfo.uniformLocations.translate, this.position[0], this.position[1], this.position[2], 0);
-       
+               
         gl.drawArrays(gl.TRIANGLE_STRIP, this.offset, this.vertexCount);
     }
 

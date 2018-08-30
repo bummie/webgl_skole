@@ -53,10 +53,7 @@ function SceneRenderer()
 			},
 			uniformLocations: {
 				projectionMatrix: gl.getUniformLocation(shaderProgram, 'uProjectionMatrix'),
-				modelViewMatrix: gl.getUniformLocation(shaderProgram, 'uModelViewMatrix'),
-				translate: gl.getUniformLocation(shaderProgram, 'uTranslate'),
-				rotate: gl.getUniformLocation(shaderProgram, 'uRotate'),
-				scale: gl.getUniformLocation(shaderProgram, 'uScale')
+				modelViewMatrix: gl.getUniformLocation(shaderProgram, 'uModelViewMatrix')
 			}
 		};
 	}
@@ -98,17 +95,6 @@ function SceneRenderer()
 			zNear,
 			zFar);
 
-		// Set the drawing position to the "identity" point, which is
-		// the center of the scene.
-		const modelViewMatrix = mat4.create();
-
-		// Now move the drawing position a bit to where we want to
-		// start drawing the square.
-
-		mat4.translate(modelViewMatrix, // destination matrix
-			modelViewMatrix, // matrix to translate
-			[-0.0, 0.0, -6.0]); // amount to translate
-		
         // Tell WebGL to use our program when drawing
         gl.useProgram(programInfo.program);
 
@@ -124,10 +110,10 @@ function SceneRenderer()
 			let x = (Math.sin((Date.now() - i * delay) * frequency/6) * amplitude);
 			let y = -(Math.sin((Date.now() - i * delay) * frequency) * amplitude);
 			
-			quad.position = [ x,  y, -5 ];
+			quad.position = [ x,  y, -12 ];
 
 			// Draw our objects
-			quad.draw(gl, programInfo, projectionMatrix, modelViewMatrix);
+			quad.draw(gl, programInfo, projectionMatrix);
 			i++;
 		});	
 	}
