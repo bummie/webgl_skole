@@ -3,11 +3,14 @@ function ObjModel(vList, fList)
 	this.vertexList = vList;
 	this.faceList = fList;
 
+    console.log(this.faceList);
+    console.log(this.vertexList);
+
     this.position = [ 0, 0, -1 ];
     this.rotation = [ 0, 0, 0 ];
     this.scale = [ .1, .1, .1 ];
 
-    this.triangleCount = vList.length/3;
+    this.triangleCount = this.vertexList.length/3;
 	this.offset = 0;
 		
     /**
@@ -26,6 +29,7 @@ function ObjModel(vList, fList)
 		mat4.scale(modelViewMatrix, modelViewMatrix, this.scale);
 		
         buffers = this.initBuffer(gl);
+
         {
             const numComponents = 3; // pull out 2 values per iteration
             const type = gl.FLOAT; // the data in the buffer is 32bit floats
@@ -46,15 +50,14 @@ function ObjModel(vList, fList)
             gl.enableVertexAttribArray(programInfo.attribLocations.vertexPosition);
         }
 
-		// Tell WebGL which indices to use to index the vertices
+        // Tell WebGL which indices to use to index the vertices
 		gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, buffers.faceBuffer);
 
         // Set the shader uniforms
         gl.uniformMatrix4fv(programInfo.uniformLocations.projectionMatrix, false, projectionMatrix);
         gl.uniformMatrix4fv(programInfo.uniformLocations.modelViewMatrix, false, modelViewMatrix);
                		
-		const type = gl.UNSIGNED_SHORT;
-		gl.drawElements(gl.TRIANGLES, this.triangleCount, type, this.offset);
+		gl.drawElements(gl.TRIANGLES, this.triangleCount, gl.UNSIGNED_SHORT, this.offset);
     }
 
     /**

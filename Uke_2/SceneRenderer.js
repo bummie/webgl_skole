@@ -9,7 +9,7 @@ function SceneRenderer()
 
 	let then = 0;
 	//const objLocation = './models/Armadillo.obj';
-	const objLocation = './models/terning.obj';
+	const objLocation = './models/lowpolytree.obj';
 
 	this.main = function() 
 	{
@@ -24,17 +24,16 @@ function SceneRenderer()
 		sceneObjects = [];
 
 		let ioTest = new IOHandler();
-		ioTest.loadFile(objLocation, loadVertices );
+		ioTest.loadFile(objLocation, loadModel );
 	}
 
 	/**
 	 * Callback
 	 * @param {*} obj 
 	 */
-	function loadVertices(obj)
+	function loadModel(obj)
 	{
 		sceneObjects.push(new ObjModel(obj.vertexList, obj.faceList));
-		console.log(new ObjModel(obj.vertexList, obj.faceList));
 	}
 
 	/**
