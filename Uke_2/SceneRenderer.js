@@ -1,6 +1,8 @@
 function SceneRenderer()
 {
 	let shaderHandler = new ShaderHandler();
+	let ui = new UIHandler();
+	let io = new IOHandler();
 	let camera = new Camera();
 	const canvas = document.querySelector("#glCanvas");
 	const gl = canvas.getContext("webgl");
@@ -25,9 +27,7 @@ function SceneRenderer()
 		shaderProgram = shaderHandler.initShaderProgram(gl);
 		programInfo = this.initProgramInfo(gl, shaderProgram);
 
-		let ioTest = new IOHandler();
-		ioTest.loadFile(treeLocation, loadModel );
-		ioTest.loadFile(legoLocation, loadModel );
+		this.addListeners();
 	}
 
 	/**
@@ -94,23 +94,6 @@ function SceneRenderer()
 	}
 
 	/**
-	 * Callback
-	 * @param {*} obj 
-	 */
-	var i = 0;
-	function loadModel(obj)
-	{
-		sceneObjects.push(new ObjModel(obj));
-		if(i == 1)
-		{
-			sceneObjects[i].scale = [.01, .01, .01];
-			sceneObjects[i].position = [0, -.3, -1];
-		}
-		
-		i++;
-	}
-
-	/**
 	 * Renderloop
 	 * @param {*} now 
 	 */
@@ -174,5 +157,26 @@ function SceneRenderer()
 			// Draw our objects
 			object.draw(gl, programInfo, camera.projectionMatrix);
 		});	
+	}
+
+	/**
+	 * Add event listeners
+	 */
+	this.addListeners = function()
+	{
+		ui.btnSpawn.addEventListener("click", this.spawnModel);
+	}	
+
+	/**
+	 * Spawns a given model
+	 */
+	this.spawnModel = function()
+	{
+		let modelPath = './models/' + ui.selectSpawn.value;
+		//alert(modelPath);
+		io.loadFile(modelPath, (obj) => 
+		{
+			sceneObjects.push(new ObjModel(obj));
+		});
 	}
 }
