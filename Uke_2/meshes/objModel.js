@@ -15,7 +15,7 @@ function ObjModel(data)
 	this.offset = 0;
 		
     /**
-     * Draws the Quad to the canvas
+     * Draws the mesh to the canvas
      * @param {*} gl 
      * @param {*} programInfo 
      * @param {*} projectionMatrix 
@@ -41,13 +41,7 @@ function ObjModel(data)
     
             gl.bindBuffer(gl.ARRAY_BUFFER, buffers.vertexBuffer);
     
-            gl.vertexAttribPointer(
-                programInfo.attribLocations.vertexPosition,
-                numComponents,
-                type,
-                normalize,
-                stride,
-                offset);
+            gl.vertexAttribPointer( programInfo.attribLocations.vertexPosition, numComponents, type, normalize, stride, offset);
             gl.enableVertexAttribArray(programInfo.attribLocations.vertexPosition);
         }
 

@@ -1,12 +1,13 @@
 function SceneRenderer()
 {
-	let sceneObjects;
 	let shaderHandler = new ShaderHandler();
+	let camera = new Camera();
 	const canvas = document.querySelector("#glCanvas");
 	const gl = canvas.getContext("webgl");
 	let shaderProgram = null;
 	let programInfo = null;
 
+	let sceneObjects;
 	let then = 0;
 	//const objLocation = './models/Armadillo.obj';
 	const treeLocation = './models/lowpolytree.obj';
@@ -30,11 +31,20 @@ function SceneRenderer()
 		ioTest.loadFile(legoLocation, loadModel );
 	}
 
-	var i = 0;
+	/**
+	 * Handle keyboard input
+	 */
+	this.input = function(event)
+	{
+		//alert(event.keyCode);
+	}
+
+
 	/**
 	 * Callback
 	 * @param {*} obj 
 	 */
+	var i = 0;
 	function loadModel(obj)
 	{
 		sceneObjects.push(new ObjModel(obj));
@@ -99,26 +109,7 @@ function SceneRenderer()
 
 		gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
 
-		// Create a perspective matrix, a special matrix that is
-		// used to simulate the distortion of perspective in a camera.
-		// Our field of view is 45 degrees, with a width/height
-		// ratio that matches the display size of the canvas
-		// and we only want to see objects between 0.1 units
-		// and 100 units away from the camera.
-
-		const fieldOfView = 45 * Math.PI / 180; // in radians
-		const aspect = gl.canvas.clientWidth / gl.canvas.clientHeight;
-		const zNear = 0.1;
-		const zFar = 100.0;
-		const projectionMatrix = mat4.create();
-
-		// note: glmatrix.js always has the first argument
-		// as the destination to receive the result.
-		mat4.perspective(projectionMatrix,
-			fieldOfView,
-			aspect,
-			zNear,
-			zFar);
+		camera.updateProjectionMatrix(gl);
 
         // Tell WebGL to use our program when drawing
         gl.useProgram(programInfo.program);
@@ -128,7 +119,7 @@ function SceneRenderer()
 		{
 			object.rotation[0] += deltatime;
 			// Draw our objects
-			object.draw(gl, programInfo, projectionMatrix);
+			object.draw(gl, programInfo, camera.projectionMatrix);
 		});	
 	}
 }
