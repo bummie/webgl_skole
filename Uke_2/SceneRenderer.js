@@ -37,6 +37,61 @@ function SceneRenderer()
 	this.input = function(event)
 	{
 		//alert(event.keyCode);
+		let moveAmount = 0.1;
+		switch(event.keyCode)
+		{	
+			// W
+			case 87:
+				camera.position[2] += moveAmount;
+			break;
+
+			// A
+			case 65:
+				camera.position[0] += moveAmount;
+
+			break;
+
+			// S
+			case 83:
+				camera.position[2] -= moveAmount;
+			break;
+
+			// D
+			case 68:
+				camera.position[0] -= moveAmount;
+			break;
+			
+			// SPACE
+			case 32:
+				camera.position[1] -= moveAmount;
+			break;
+
+			// CTRL
+			case 17:
+				camera.position[1] += moveAmount;
+			break;
+
+			// UP
+			case 38:
+				camera.rotation[0] += moveAmount;
+			break;
+
+			// LEFT
+			case 37:
+				camera.rotation[1] -= moveAmount;
+			break;
+
+			// DOWN
+			case 40:
+				camera.rotation[0] -= moveAmount;
+			break;
+
+			// RIGHT
+			case 39:
+				camera.rotation[1] += moveAmount;
+			break;
+			
+		}
 	}
 
 
