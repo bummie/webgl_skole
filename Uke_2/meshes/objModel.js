@@ -10,7 +10,7 @@ function ObjModel(vList, fList)
     this.rotation = [ 0, 0, 0 ];
     this.scale = [ .1, .1, .1 ];
 
-    this.triangleCount = this.vertexList.length/3;
+    this.vertexCount = this.vertexList.length/3;
 	this.offset = 0;
 		
     /**
@@ -56,8 +56,9 @@ function ObjModel(vList, fList)
         // Set the shader uniforms
         gl.uniformMatrix4fv(programInfo.uniformLocations.projectionMatrix, false, projectionMatrix);
         gl.uniformMatrix4fv(programInfo.uniformLocations.modelViewMatrix, false, modelViewMatrix);
-               		
-		gl.drawElements(gl.TRIANGLES, this.triangleCount, gl.UNSIGNED_SHORT, this.offset);
+          
+        gl.drawArrays(gl.POINTS, 0, this.vertexCount);
+		gl.drawElements(gl.TRIANGLES, this.vertexCount, gl.UNSIGNED_SHORT, this.offset);
     }
 
     /**
