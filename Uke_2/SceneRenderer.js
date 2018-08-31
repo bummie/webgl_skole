@@ -4,17 +4,15 @@ function SceneRenderer()
 	let ui = new UIHandler();
 	let io = new IOHandler();
 	let camera = new Camera();
+
 	const canvas = document.querySelector("#glCanvas");
 	const gl = canvas.getContext("webgl");
-	let shaderProgram = null;
-	let programInfo = null;
+
+	let shaderProgram;
+	let programInfo;
 
 	let sceneObjects = [];
 	let then = 0;
-	const armadilloLocation = './models/Armadillo.obj';
-	const treeLocation = './models/lowpolytree.obj';
-	const legoLocation = './models/lego.obj';
-	const diceLocation = './models/terning.obj';
 
 	this.main = function() 
 	{
