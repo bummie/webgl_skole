@@ -10,6 +10,8 @@ function SceneRenderer()
 	let then = 0;
 	//const objLocation = './models/Armadillo.obj';
 	const objLocation = './models/lowpolytree.obj';
+	//const objLocation = './models/lego.obj';
+	//const objLocation = './models/terning.obj';
 
 	this.main = function() 
 	{
@@ -33,7 +35,7 @@ function SceneRenderer()
 	 */
 	function loadModel(obj)
 	{
-		sceneObjects.push(new ObjModel(obj.vertexList, obj.faceList));
+		sceneObjects.push(new ObjModel(obj));
 	}
 
 	/**

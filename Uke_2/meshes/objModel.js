@@ -1,7 +1,8 @@
-function ObjModel(vList, fList)
+function ObjModel(data)
 {
-	this.vertexList = vList;
-	this.faceList = fList;
+	this.vertexList = data.vertexList;
+	this.faceList = data.faceList;
+    this.vertexNormalList = data.vertexNormalList;
 
     console.log(this.faceList);
     console.log(this.vertexList);
@@ -10,7 +11,7 @@ function ObjModel(vList, fList)
     this.rotation = [ 0, 0, 0 ];
     this.scale = [ .1, .1, .1 ];
 
-    this.vertexCount = this.vertexList.length/3;
+    this.faceCount = this.faceList.length;
 	this.offset = 0;
 		
     /**
@@ -57,8 +58,8 @@ function ObjModel(vList, fList)
         gl.uniformMatrix4fv(programInfo.uniformLocations.projectionMatrix, false, projectionMatrix);
         gl.uniformMatrix4fv(programInfo.uniformLocations.modelViewMatrix, false, modelViewMatrix);
           
-        gl.drawArrays(gl.POINTS, 0, this.vertexCount);
-		gl.drawElements(gl.TRIANGLES, this.vertexCount, gl.UNSIGNED_SHORT, this.offset);
+        gl.drawArrays(gl.POINTS, 0, this.vertexList.length/3);
+		gl.drawElements(gl.TRIANGLES, this.faceCount, gl.UNSIGNED_SHORT, this.offset);
     }
 
     /**
@@ -76,7 +77,7 @@ function ObjModel(vList, fList)
 		gl.bufferData(gl.ELEMENT_ARRAY_BUFFER, new Uint16Array(this.faceList), gl.STATIC_DRAW);
 
         return {
-       		vertexBuffer: positionBuffer,
+            vertexBuffer: positionBuffer,
 			faceBuffer: indexBuffer
         };
     }
