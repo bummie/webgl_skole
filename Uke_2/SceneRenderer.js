@@ -152,8 +152,6 @@ function SceneRenderer()
 		// Draw objects in array
 		sceneObjects.forEach(function(object) 
 		{
-			object.rotation[1] += deltatime;
-
 			// Draw our objects
 			object.draw(gl, programInfo, camera.projectionMatrix);
 		});	
@@ -166,7 +164,19 @@ function SceneRenderer()
 	{
 		ui.btnSpawn.addEventListener("click", this.spawnModel);
 		ui.selectDrawType.addEventListener("change", this.updateDrawType);
-		//object.addEventListener("change", myScript);
+		ui.selectObject.addEventListener("change", this.updateObjectToUI);
+
+		ui.position[0].addEventListener("change", this.updateUIToObject);
+		ui.position[1].addEventListener("change", this.updateUIToObject);
+		ui.position[2].addEventListener("change", this.updateUIToObject);
+
+		ui.rotation[0].addEventListener("change", this.updateUIToObject);
+		ui.rotation[1].addEventListener("change", this.updateUIToObject);
+		ui.rotation[2].addEventListener("change", this.updateUIToObject);
+
+		ui.scale[0].addEventListener("change", this.updateUIToObject);
+		ui.scale[1].addEventListener("change", this.updateUIToObject);
+		ui.scale[2].addEventListener("change", this.updateUIToObject);
 	}	
 
 	/**
@@ -179,7 +189,51 @@ function SceneRenderer()
 		console.log("Index: " + ui.selectObject.selectedIndex + " Tpye: " + ui.selectDrawType.value);
 		sceneObjects[ui.selectObject.selectedIndex].drawType = ui.selectDrawType.value;
 	}
-	
+
+	/**
+	 * Updates the ui values on selected object change
+	 */
+	this.updateObjectToUI = function()
+	{
+		if(sceneObjects.length <= 0) { return; }
+
+		let objectIndex = ui.selectObject.selectedIndex;
+
+		ui.selectDrawType.value = sceneObjects[objectIndex].drawType;
+
+		ui.position[0].value = sceneObjects[objectIndex].position[0];
+		ui.position[1].value = sceneObjects[objectIndex].position[1];
+		ui.position[2].value = sceneObjects[objectIndex].position[2];
+
+		ui.rotation[0].value = sceneObjects[objectIndex].rotation[0];
+		ui.rotation[1].value = sceneObjects[objectIndex].rotation[1];
+		ui.rotation[2].value = sceneObjects[objectIndex].rotation[2];
+
+		ui.scale[0].value = sceneObjects[objectIndex].scale[0];
+		ui.scale[1].value = sceneObjects[objectIndex].scale[1];
+		ui.scale[2].value = sceneObjects[objectIndex].scale[2];
+	}
+
+	/**
+	 * Updates the object with UI values
+	 */
+	this.updateUIToObject = function()
+	{
+		let objectIndex = ui.selectObject.selectedIndex;
+
+		sceneObjects[objectIndex].position[0] = ui.position[0].value;
+		sceneObjects[objectIndex].position[1] = ui.position[1].value;
+		sceneObjects[objectIndex].position[2] = ui.position[2].value;
+
+		sceneObjects[objectIndex].rotation[0] = ui.rotation[0].value;
+		sceneObjects[objectIndex].rotation[1] = ui.rotation[1].value;
+		sceneObjects[objectIndex].rotation[2] = ui.rotation[2].value;
+
+		sceneObjects[objectIndex].scale[0] = ui.scale[0].value;
+		sceneObjects[objectIndex].scale[1] = ui.scale[1].value;
+		sceneObjects[objectIndex].scale[2] = ui.scale[2].value;
+	}
+
 	/**
 	 * Spawns a given model
 	 */
