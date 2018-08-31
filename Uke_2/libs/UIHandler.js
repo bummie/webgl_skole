@@ -24,4 +24,15 @@ function UIHandler()
         document.getElementById("inScaleY"),
         document.getElementById("inScaleZ")
     ];
+    
+    /**
+     * Adds object to the UI dropdown
+     * @param {*} title 
+     */
+    this.addOption = function(title)
+    {   
+        let option = document.createElement("option");
+        option.text = title;
+        this.selectObject.add(option);
+    }
 }

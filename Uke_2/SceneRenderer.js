@@ -165,18 +165,33 @@ function SceneRenderer()
 	this.addListeners = function()
 	{
 		ui.btnSpawn.addEventListener("click", this.spawnModel);
+		ui.selectDrawType.addEventListener("change", this.updateDrawType);
+		//object.addEventListener("change", myScript);
 	}	
 
+	/**
+	 * Callback on select drawType
+	 */
+	this.updateDrawType = function()
+	{
+		if(sceneObjects.length <= 0) { return; }
+
+		console.log("Index: " + ui.selectObject.selectedIndex + " Tpye: " + ui.selectDrawType.value);
+		sceneObjects[ui.selectObject.selectedIndex].drawType = ui.selectDrawType.value;
+	}
+	
 	/**
 	 * Spawns a given model
 	 */
 	this.spawnModel = function()
-	{
+	{	
+		let title = ui.selectSpawn[ui.selectSpawn.selectedIndex].text;
 		let modelPath = './models/' + ui.selectSpawn.value;
 		//alert(modelPath);
 		io.loadFile(modelPath, (obj) => 
 		{
 			sceneObjects.push(new ObjModel(obj));
+			ui.addOption(title);
 		});
 	}
 }
