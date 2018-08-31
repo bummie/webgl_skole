@@ -7,7 +7,7 @@ function SceneRenderer()
 	let shaderProgram = null;
 	let programInfo = null;
 
-	let sceneObjects;
+	let sceneObjects = [];
 	let then = 0;
 	//const objLocation = './models/Armadillo.obj';
 	const treeLocation = './models/lowpolytree.obj';
@@ -24,7 +24,6 @@ function SceneRenderer()
 
 		shaderProgram = shaderHandler.initShaderProgram(gl);
 		programInfo = this.initProgramInfo(gl, shaderProgram);
-		sceneObjects = [];
 
 		let ioTest = new IOHandler();
 		ioTest.loadFile(treeLocation, loadModel );
@@ -94,7 +93,6 @@ function SceneRenderer()
 		}
 	}
 
-
 	/**
 	 * Callback
 	 * @param {*} obj 
@@ -128,7 +126,6 @@ function SceneRenderer()
 	}
 	requestAnimationFrame(this.render.bind(this));
 
-
 	/**
 	 * Initiates Program Info
 	 * @param {*} gl 
@@ -143,7 +140,8 @@ function SceneRenderer()
 			},
 			uniformLocations: {
 				projectionMatrix: gl.getUniformLocation(shaderProgram, 'uProjectionMatrix'),
-				modelViewMatrix: gl.getUniformLocation(shaderProgram, 'uModelViewMatrix')
+				modelViewMatrix: gl.getUniformLocation(shaderProgram, 'uModelViewMatrix'),
+				zColor: gl.getUniformLocation(shaderProgram, 'zColor')
 			}
 		};
 	}
@@ -169,10 +167,16 @@ function SceneRenderer()
         // Tell WebGL to use our program when drawing
         gl.useProgram(programInfo.program);
 
+		
+
 		// Draw objects in array
 		sceneObjects.forEach(function(object) 
 		{
 			object.rotation[0] += deltatime;
+			object.rotation[1] += deltatime;
+			object.rotation[2] += deltatime;
+
+
 			// Draw our objects
 			object.draw(gl, programInfo, camera.projectionMatrix);
 		});	
