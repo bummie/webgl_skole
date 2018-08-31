@@ -11,6 +11,7 @@ function ObjModel(data)
     this.rotation = [ 0, 0, 0 ];
     this.scale = [ .1, .1, .1 ];
 
+    this.drawType = 0;
     this.faceCount = this.faceList.length;
 	this.offset = 0;
 		
@@ -56,7 +57,7 @@ function ObjModel(data)
         gl.uniformMatrix4fv(programInfo.uniformLocations.modelViewMatrix, false, modelViewMatrix);
           
         //gl.drawArrays(gl.POINTS, 0, this.vertexList.length/3);
-		gl.drawElements(gl.TRIANGLES, this.faceCount, gl.UNSIGNED_SHORT, this.offset);
+        gl.drawElements(this.drawType, this.faceCount, gl.UNSIGNED_SHORT, this.offset);
     }
 
     /**

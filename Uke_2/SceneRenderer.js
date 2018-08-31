@@ -9,10 +9,10 @@ function SceneRenderer()
 
 	let sceneObjects = [];
 	let then = 0;
-	//const objLocation = './models/Armadillo.obj';
+	const armadilloLocation = './models/Armadillo.obj';
 	const treeLocation = './models/lowpolytree.obj';
 	const legoLocation = './models/lego.obj';
-	//const objLocation = './models/terning.obj';
+	const diceLocation = './models/terning.obj';
 
 	this.main = function() 
 	{
@@ -36,7 +36,7 @@ function SceneRenderer()
 	this.input = function(event)
 	{
 		//alert(event.keyCode);
-		let moveAmount = 0.1;
+		let moveAmount = 0.03;
 		switch(event.keyCode)
 		{	
 			// W
@@ -159,7 +159,6 @@ function SceneRenderer()
 		gl.depthFunc(gl.LEQUAL); // Near things obscure far things
 
 		// Clear the canvas before we start drawing on it.
-
 		gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
 
 		camera.updateProjectionMatrix(gl);
@@ -167,15 +166,10 @@ function SceneRenderer()
         // Tell WebGL to use our program when drawing
         gl.useProgram(programInfo.program);
 
-		
-
 		// Draw objects in array
 		sceneObjects.forEach(function(object) 
 		{
-			object.rotation[0] += deltatime;
 			object.rotation[1] += deltatime;
-			object.rotation[2] += deltatime;
-
 
 			// Draw our objects
 			object.draw(gl, programInfo, camera.projectionMatrix);

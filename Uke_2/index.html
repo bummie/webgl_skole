@@ -1,6 +1,54 @@
 <body>
     <canvas id="glCanvas" width="720" height="480"></canvas>
 
+    <table>
+        <tr>
+            <td><select id="selectSpawn">
+                    <option value="Armadillo.obj">Armadillo</option>
+                    <option value="lego.obj">Lego</option>
+                    <option value="lowpolytree.obj">Tree</option>
+                    <option value="terning.obj">Dice</option>
+            </select></td>
+            <td><button id="btnSpawn">Spawn</button></td>
+            
+        </tr>
+        <tr><td><br></td></tr>
+        <tr>
+            <td><select id="selectObject"></select></td>
+            <td><select id="selectDrawType">
+                    <option value="0">POINTS</option>
+                    <option value="1">LINE_STRIP</option>
+                    <option value="2">LINE_LOOP</option>
+                    <option value="3">LINES</option>
+                    <option value="4">TRIANGLE_STRIP</option>
+                    <option value="5">TRIANGLE_FAN</option>
+                    <option value="6">TRIANGLES</option>
+            </select></td>
+            <td><button id="btnDelete">Delete</button></td>
+        </tr>
+
+        <tr>
+            <td>Position</td>
+            <td><input id="inPosX" type="number" step="0.01"></td>
+            <td><input id="inPosY" type="number" step="0.01"></td>
+            <td><input id="inPosZ" type="number" step="0.01"></td>
+        </tr>
+
+        <tr>
+            <td>Rotation</td>
+            <td><input id="inRotX" type="number" step="0.01"></td>
+            <td><input id="inRotY" type="number" step="0.01"></td>
+            <td><input id="inRotZ" type="number" step="0.01"></td>
+        </tr>
+
+        <tr>
+            <td>Scale</td>
+            <td><input id="inScaleX" type="number" step="0.01"></td>
+            <td><input id="inScaleY" type="number" step="0.01"></td>
+            <td><input id="inScaleZ" type="number" step="0.01"></td>
+        </tr>
+    </table>
+
     <!-- Javascript files-->
     <!-- Dependencies -->
     <script src="libs/gl-matrix-min.js"></script>

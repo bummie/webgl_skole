@@ -19,7 +19,7 @@ const vsSource = `
 		y = v.y / v.z;
 		
         gl_Position = v;
-        gl_PointSize = 5.0;
+        gl_PointSize = 2.0;
         vColor = aVertexColor;
     }
   `;
