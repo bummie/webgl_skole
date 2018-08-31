@@ -9,8 +9,8 @@ function SceneRenderer()
 
 	let then = 0;
 	//const objLocation = './models/Armadillo.obj';
-	const objLocation = './models/lowpolytree.obj';
-	//const objLocation = './models/lego.obj';
+	const treeLocation = './models/lowpolytree.obj';
+	const legoLocation = './models/lego.obj';
 	//const objLocation = './models/terning.obj';
 
 	this.main = function() 
@@ -26,9 +26,11 @@ function SceneRenderer()
 		sceneObjects = [];
 
 		let ioTest = new IOHandler();
-		ioTest.loadFile(objLocation, loadModel );
+		ioTest.loadFile(treeLocation, loadModel );
+		ioTest.loadFile(legoLocation, loadModel );
 	}
 
+	var i = 0;
 	/**
 	 * Callback
 	 * @param {*} obj 
@@ -36,6 +38,13 @@ function SceneRenderer()
 	function loadModel(obj)
 	{
 		sceneObjects.push(new ObjModel(obj));
+		if(i == 1)
+		{
+			sceneObjects[i].scale = [.01, .01, .01];
+			sceneObjects[i].position = [0, -.3, -1];
+		}
+		
+		i++;
 	}
 
 	/**
