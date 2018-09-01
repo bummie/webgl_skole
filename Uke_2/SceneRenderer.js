@@ -162,7 +162,7 @@ function SceneRenderer()
 	{
 		ui.btnSpawn.addEventListener("click", this.spawnModel);
 		ui.selectDrawType.addEventListener("change", this.updateDrawType);
-		ui.selectObject.addEventListener("change", this.updateObjectToUI);
+		ui.selectObject.addEventListener("change", updateObjectToUI);
 
 		ui.position[0].addEventListener("change", this.updateUIToObject);
 		ui.position[1].addEventListener("change", this.updateUIToObject);
@@ -191,7 +191,7 @@ function SceneRenderer()
 	/**
 	 * Updates the ui values on selected object change
 	 */
-	this.updateObjectToUI = function()
+	let updateObjectToUI = function()
 	{
 		if(sceneObjects.length <= 0) { return; }
 
@@ -240,10 +240,11 @@ function SceneRenderer()
 		let title = ui.selectSpawn[ui.selectSpawn.selectedIndex].text;
 		let modelPath = './models/' + ui.selectSpawn.value;
 		//alert(modelPath);
-		io.loadFile(modelPath, (obj) => 
+		io.loadFile(modelPath, (obj) =>
 		{
 			sceneObjects.push(new ObjModel(obj));
 			ui.addOption(title);
+			updateObjectToUI();
 		});
 	}
 }
