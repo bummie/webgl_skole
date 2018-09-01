@@ -8,7 +8,7 @@ function ObjModel(data)
     this.rotation = [ 0, 0, 0 ];
     this.scale = [ 1, 1, 1 ];
 
-    this.drawType = 6;
+    this.drawType = 4;
     this.faceCount = this.faceList.length;
 	this.offset = 0;
 		
