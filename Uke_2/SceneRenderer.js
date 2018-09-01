@@ -252,7 +252,7 @@ function SceneRenderer()
 		console.log("Deleted object");
 		let objectIndex = ui.selectObject.selectedIndex;
 
-		sceneObjects.slice(objectIndex, objectIndex);
-		// TODO:: Remove option from selected list
+		sceneObjects.splice(objectIndex, 1);
+		ui.selectObject.remove(objectIndex);
 	}
 }
