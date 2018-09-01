@@ -1,4 +1,4 @@
-function IOHandler()
+function IOHandler(scene)
 {
 /**
  * Loads the given file and sends the data to the parser
@@ -8,14 +8,14 @@ function IOHandler()
   {
       fetch(modelPath)
       .then(response => response.text())
-      .then(data => callback(this.parseObj(data)));
+      .then(data => callback(parseObj(data)));
   }
 
   /**
    * Parse the obj file text
    * TODO:: Check if file is valid
    */
-  this.parseObj = function(objFile)
+  function parseObj(objFile)
   {
     let objFileSplit = objFile.split(/\r?\n/g);
     let vList = [],
@@ -65,4 +65,36 @@ function IOHandler()
       faceList: fList
     }
   }
+
+  /**
+   * Handle loading of local .obj files
+   * @param {*} evt 
+   */
+  this.handleFileSelect = function(evt)
+  {
+    let file = evt.target.files[0]; 
+
+	if (file) 
+	{
+		let r = new FileReader();
+		r.onload = function(e)
+		{ 
+			let contents = e.target.result;
+			scene.loadModelFromFile(parseObj(contents), file.name);
+
+		  	console.log( "Got the file.n" 
+				+ "name: " + file.name + "n"
+				+ "type: " + file.type + "n"
+				+ "size: " + file.size + " bytesn"
+		  	);  
+		}
+		r.readAsText(file);
+	}
+	else 
+	{ 
+		alert("Failed to load file");
+	}
+  }
+
+  document.getElementById('files').addEventListener('change', this.handleFileSelect, false);
 }

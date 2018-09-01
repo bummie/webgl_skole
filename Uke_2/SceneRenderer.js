@@ -2,7 +2,7 @@ function SceneRenderer()
 {
 	let shaderHandler = new ShaderHandler();
 	let ui = new UIHandler();
-	let io = new IOHandler();
+	let io = new IOHandler(this);
 	let camera = new Camera();
 
 	const canvas = document.querySelector("#glCanvas");
@@ -240,6 +240,17 @@ function SceneRenderer()
 			ui.addOption(title);
 			updateObjectToUI();
 		});
+	}
+
+	/**
+	 * Loads data from file
+	 * @param {*} data 
+	 */
+	this.loadModelFromFile = function(data, title)
+	{
+		sceneObjects.push(new ObjModel(data));
+		ui.addOption(title);
+		updateObjectToUI();
 	}
 
 	/**
