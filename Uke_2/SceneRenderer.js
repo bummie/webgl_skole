@@ -122,7 +122,6 @@ function SceneRenderer()
 			uniformLocations: {
 				projectionMatrix: gl.getUniformLocation(shaderProgram, 'uProjectionMatrix'),
 				modelViewMatrix: gl.getUniformLocation(shaderProgram, 'uModelViewMatrix'),
-				zColor: gl.getUniformLocation(shaderProgram, 'zColor')
 			}
 		};
 	}
@@ -139,18 +138,13 @@ function SceneRenderer()
 		gl.enable(gl.DEPTH_TEST); // Enable depth testing
 		gl.depthFunc(gl.LEQUAL); // Near things obscure far things
 
-		// Clear the canvas before we start drawing on it.
 		gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
+		gl.useProgram(programInfo.program);
 
 		camera.updateProjectionMatrix(gl);
 
-        // Tell WebGL to use our program when drawing
-        gl.useProgram(programInfo.program);
-
-		// Draw objects in array
 		sceneObjects.forEach(function(object) 
 		{
-			// Draw our objects
 			object.draw(gl, programInfo, camera.projectionMatrix);
 		});	
 	}
@@ -161,6 +155,7 @@ function SceneRenderer()
 	this.addListeners = function()
 	{
 		ui.btnSpawn.addEventListener("click", this.spawnModel);
+		ui.btnDelete.addEventListener("click", this.deleteModel);
 		ui.selectDrawType.addEventListener("change", this.updateDrawType);
 		ui.selectObject.addEventListener("change", updateObjectToUI);
 
@@ -184,7 +179,6 @@ function SceneRenderer()
 	{
 		if(sceneObjects.length <= 0) { return; }
 
-		console.log("Index: " + ui.selectObject.selectedIndex + " Tpye: " + ui.selectDrawType.value);
 		sceneObjects[ui.selectObject.selectedIndex].drawType = ui.selectDrawType.value;
 	}
 
@@ -246,5 +240,19 @@ function SceneRenderer()
 			ui.addOption(title);
 			updateObjectToUI();
 		});
+	}
+
+	/**
+	 * Deletes the selected model
+	 */
+	this.deleteModel = function()
+	{
+		if(sceneObjects.length <= 0) { return; }
+
+		console.log("Deleted object");
+		let objectIndex = ui.selectObject.selectedIndex;
+
+		sceneObjects.slice(objectIndex, objectIndex);
+		// TODO:: Remove option from selected list
 	}
 }
