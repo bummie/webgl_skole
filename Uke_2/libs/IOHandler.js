@@ -48,7 +48,7 @@ function IOHandler()
         case 'f':
           for(let i = 1; i <= vertexDataCount; i++)
           {
-            fList.push(parseInt(lineSplit[i].split('//')[0])-1);
+            fList.push(parseInt(lineSplit[i].split('/')[0])-1);
           };
         break;
       } 

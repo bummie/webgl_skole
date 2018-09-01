@@ -4,14 +4,11 @@ function ObjModel(data)
 	this.faceList = data.faceList;
     this.vertexNormalList = data.vertexNormalList;
 
-    console.log(this.faceList);
-    console.log(this.vertexList);
-
-    this.position = [ 0, 0, -1 ];
+    this.position = [ 0, 0, 0 ];
     this.rotation = [ 0, 0, 0 ];
-    this.scale = [ .1, .1, .1 ];
+    this.scale = [ 1, 1, 1 ];
 
-    this.drawType = 0;
+    this.drawType = 6;
     this.faceCount = this.faceList.length;
 	this.offset = 0;
 		
