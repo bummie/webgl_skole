@@ -1,18 +1,19 @@
 function IOHandler()
 {
 /**
- * 
+ * Loads the given file and sends the data to the parser
  * @param {*} callback 
  */
   this.loadFile = function(modelPath, callback)
   {
       fetch(modelPath)
       .then(response => response.text())
-      .then(text => callback(this.parseObj(text)));
+      .then(data => callback(this.parseObj(data)));
   }
 
   /**
    * Parse the obj file text
+   * TODO:: Check if file is valid
    */
   this.parseObj = function(objFile)
   {
@@ -48,7 +49,11 @@ function IOHandler()
         case 'f':
           for(let i = 1; i <= vertexDataCount; i++)
           {
-            fList.push(parseInt(lineSplit[i].split('/')[0])-1);
+			fList.push(parseInt(lineSplit[i].split('/')[0])-1);
+			//TODO:: Load more face data
+			//fList.push(parseInt(lineSplit[i].split('/')[1])-1);
+			//fList.push(parseInt(lineSplit[i].split('/')[2])-1);
+
           };
         break;
       } 
