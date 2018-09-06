@@ -35,6 +35,8 @@ function SceneRenderer()
 	{
 		//alert(event.keyCode);
 		let moveAmount = 0.03;
+		let rotateAmount = 1.5;
+
 		switch(event.keyCode)
 		{	
 			// W
@@ -70,22 +72,22 @@ function SceneRenderer()
 
 			// UP
 			case 38:
-				camera.rotation[0] += moveAmount;
+				camera.rotation[0] += rotateAmount;
 			break;
 
 			// LEFT
 			case 37:
-				camera.rotation[1] -= moveAmount;
+				camera.rotation[1] -= rotateAmount;
 			break;
 
 			// DOWN
 			case 40:
-				camera.rotation[0] -= moveAmount;
+				camera.rotation[0] -= rotateAmount;
 			break;
 
 			// RIGHT
 			case 39:
-				camera.rotation[1] += moveAmount;
+				camera.rotation[1] += rotateAmount;
 			break;
 			
 		}

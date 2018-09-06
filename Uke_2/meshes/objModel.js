@@ -23,13 +23,12 @@ function ObjModel(data)
     {
 		const modelViewMatrix = mat4.create();
 
-		mat4.translate(modelViewMatrix, modelViewMatrix, this.position); 
         mat4.rotate(modelViewMatrix, modelViewMatrix, this.rotation[0], [1, 0, 0]);
         mat4.rotate(modelViewMatrix, modelViewMatrix, this.rotation[1], [0, 1, 0]);
         mat4.rotate(modelViewMatrix, modelViewMatrix, this.rotation[2], [0, 0, 1]);
-
 		mat4.scale(modelViewMatrix, modelViewMatrix, this.scale);
-		
+		mat4.translate(modelViewMatrix, modelViewMatrix, this.position); 
+
         buffers = this.initBuffer(gl);
 
         {
