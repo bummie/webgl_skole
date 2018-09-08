@@ -18,6 +18,7 @@ function Camera()
         const fieldOfView = degToRad(this.fov); 
 		const aspect = gl.canvas.clientWidth / gl.canvas.clientHeight;
 
+        mat4.identity(this.projectionMatrix);
 		mat4.perspective(this.projectionMatrix, fieldOfView, aspect, this.zNear, this.zFar);
 
   /*X*/ mat4.rotate(this.projectionMatrix, this.projectionMatrix, degToRad(this.rotation[0]), [1, 0, 0]);

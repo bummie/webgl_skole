@@ -11,7 +11,9 @@ function ObjModel(data)
     this.drawType = 4;
     this.faceCount = this.faceList.length;
 	this.offset = 0;
-		
+
+    const modelViewMatrix = mat4.create();
+
     /**
      * Draws the mesh to the canvas
      * @param {*} gl 
@@ -21,7 +23,7 @@ function ObjModel(data)
      */
     this.draw = function(gl, programInfo, projectionMatrix)
     {
-		const modelViewMatrix = mat4.create();
+        mat4.identity(modelViewMatrix);
 
         mat4.rotate(modelViewMatrix, modelViewMatrix, this.rotation[0], [1, 0, 0]);
         mat4.rotate(modelViewMatrix, modelViewMatrix, this.rotation[1], [0, 1, 0]);
