@@ -28,10 +28,17 @@ function Camera()
 
         mat4.scale(this.projectionMatrix, this.projectionMatrix, this.scale);
         
-        this.rotationDirection[0] = Math.cos(glMatrix.toRadian(this.rotation[0]) * Math.cos(glMatrix.toRadian(this.rotation[1])));
-        this.rotationDirection[1] = Math.sin(glMatrix.toRadian(this.rotation[0]));
-        this.rotationDirection[2] = Math.cos(glMatrix.toRadian(this.rotation[0]) * Math.sin(glMatrix.toRadian(this.rotation[1])));
-        
+        if(this.rotation[0] > 89) { this.rotation[0] =  89; }
+        if(this.rotation[0] < -89) { this.rotation[0] = -89; }
+
+        let pitch = glMatrix.toRadian(this.rotation[0]);
+        let yaw = glMatrix.toRadian(this.rotation[1]);
+
+        this.rotationDirection[0] = Math.cos(pitch) * Math.cos(yaw);
+        this.rotationDirection[1] = Math.sin(pitch);
+        this.rotationDirection[2] = Math.cos(pitch) * Math.sin(glMatrix.toRadian(yaw));
+        vec3.normalize(this.rotationDirection, this.rotationDirection);
+
         let newPosition = [0, 0, 0];
         let posLength = vec3.squaredLength(this.position);
         vec3.scale(newPosition, this.rotationDirection, posLength);
