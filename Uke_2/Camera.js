@@ -15,24 +15,18 @@ function Camera()
      */
     this.updateProjectionMatrix = function(gl)
     {
-        const fieldOfView = degToRad(this.fov); 
+        const fieldOfView = glMatrix.toRadian(this.fov); 
 		const aspect = gl.canvas.clientWidth / gl.canvas.clientHeight;
 
         mat4.identity(this.projectionMatrix);
 		mat4.perspective(this.projectionMatrix, fieldOfView, aspect, this.zNear, this.zFar);
 
-  /*X*/ mat4.rotate(this.projectionMatrix, this.projectionMatrix, degToRad(this.rotation[0]), [1, 0, 0]);
-  /*Y*/ mat4.rotate(this.projectionMatrix, this.projectionMatrix, degToRad(this.rotation[1]), [0, 1, 0]);
-  /*Z*/ mat4.rotate(this.projectionMatrix, this.projectionMatrix, degToRad(this.rotation[2]), [0, 0, 1]);
+  /*X*/ mat4.rotate(this.projectionMatrix, this.projectionMatrix, glMatrix.toRadian(this.rotation[0]), [1, 0, 0]);
+  /*Y*/ mat4.rotate(this.projectionMatrix, this.projectionMatrix, glMatrix.toRadian(this.rotation[1]), [0, 1, 0]);
+  /*Z*/ mat4.rotate(this.projectionMatrix, this.projectionMatrix, glMatrix.toRadian(this.rotation[2]), [0, 0, 1]);
 
         mat4.scale(this.projectionMatrix, this.projectionMatrix, this.scale);
 		
         mat4.translate(this.projectionMatrix, this.projectionMatrix, this.position);
 	}
-	
-	function degToRad(deg)
-	{
-		return deg * Math.PI / 180;
-	}
-
 }
