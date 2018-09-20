@@ -7,6 +7,6 @@ const fsSource = `
 	
 	void main() 
 	{
-        gl_FragColor = vec4(sin(0.5 * x + 0.5), sin(-0.5 * y + 0.5), sin(x), 1.0 );
+        gl_FragColor = vColor; //vec4(sin(0.5 * x + 0.5), sin(-0.5 * y + 0.5), sin(x), 1.0 );
     }
 `;

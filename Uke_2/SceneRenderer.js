@@ -119,7 +119,8 @@ function SceneRenderer()
 			program: shaderProgram,
 			attribLocations: {
 				vertexPosition: gl.getAttribLocation(shaderProgram, 'aVertexPosition'),
-				vertexColor: gl.getAttribLocation(shaderProgram, 'aVertexColor')
+				vertexColor: gl.getAttribLocation(shaderProgram, 'aVertexColor'),
+				vertexNormal: gl.getAttribLocation(shaderProgram, 'aVertexNormal')
 			},
 			uniformLocations: {
 				projectionMatrix: gl.getUniformLocation(shaderProgram, 'uProjectionMatrix'),

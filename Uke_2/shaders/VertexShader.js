@@ -1,7 +1,8 @@
 // Vertex shader program
 
 const vsSource = `
-    attribute vec4 aVertexPosition;
+	attribute vec4 aVertexPosition;
+	attribute vec4 aVertexNormal;
     attribute vec4 aVertexColor;
 
     uniform mat4 uModelViewMatrix;
@@ -20,6 +21,6 @@ const vsSource = `
 		
         gl_Position = v;
         gl_PointSize = 2.0;
-        vColor = aVertexColor;
+        vColor = aVertexNormal;
     }
   `;
