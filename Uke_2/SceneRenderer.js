@@ -99,10 +99,12 @@ function SceneRenderer()
 	 */
 	this.render = function(now) 
 	{
+		
 		now *= 0.001;  // convert to seconds
 		const deltaTime = now - then;
 		then = now;
-
+		
+		this.updateCameraUI();
 		this.draw(gl, programInfo, deltaTime);
 
 		requestAnimationFrame(this.render.bind(this));
@@ -183,6 +185,18 @@ function SceneRenderer()
 		if(sceneObjects.length <= 0) { return; }
 
 		sceneObjects[ui.selectObject.selectedIndex].drawType = ui.selectDrawType.value;
+	}
+
+	/**
+	 * Updates the UI with data from the camera object
+	 */
+	this.updateCameraUI = function()
+	{
+		ui.camPosition.innerHTML = `Position ${camera.position}`;
+		ui.camRotation.innerHTML = `Rotation ${camera.rotation}`;
+		ui.camScale.innerHTML = `Scale ${camera.scale}`;
+		
+		ui.fovValue.innerHTML = `FOV: ${camera.fov}`;
 	}
 
 	/**

@@ -24,6 +24,13 @@ function UIHandler()
         document.getElementById("inScaleY"),
         document.getElementById("inScaleZ")
     ];
+
+    this.camPosition = document.getElementById("camPosition");
+    this.camRotation = document.getElementById("camRotation");
+    this.camScale = document.getElementById("camScale");
+
+    this.fovValue = document.getElementById("fovValue");
+    this.fovSlider = document.getElementById("fovSlider");
     
     /**
      * Adds object to the UI dropdown
