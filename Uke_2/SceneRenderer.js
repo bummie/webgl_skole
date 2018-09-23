@@ -26,6 +26,7 @@ function SceneRenderer()
 		programInfo = this.initProgramInfo(gl, shaderProgram);
 
 		this.addListeners();
+		requestAnimationFrame(this.render.bind(this));
 	}
 
 	/**
@@ -99,7 +100,6 @@ function SceneRenderer()
 	 */
 	this.render = function(now) 
 	{
-		
 		now *= 0.001;  // convert to seconds
 		const deltaTime = now - then;
 		then = now;
@@ -109,7 +109,6 @@ function SceneRenderer()
 
 		requestAnimationFrame(this.render.bind(this));
 	}
-	requestAnimationFrame(this.render.bind(this));
 
 	/**
 	 * Initiates Program Info
@@ -175,6 +174,8 @@ function SceneRenderer()
 		ui.scale[0].addEventListener("change", this.updateUIToObject);
 		ui.scale[1].addEventListener("change", this.updateUIToObject);
 		ui.scale[2].addEventListener("change", this.updateUIToObject);
+
+		ui.fovSlider.addEventListener("change", this.updateUIToObject);
 	}	
 
 	/**
@@ -241,6 +242,8 @@ function SceneRenderer()
 		sceneObjects[objectIndex].scale[0] = ui.scale[0].value;
 		sceneObjects[objectIndex].scale[1] = ui.scale[1].value;
 		sceneObjects[objectIndex].scale[2] = ui.scale[2].value;
+
+		camera.fov = ui.fovSlider.value;
 	}
 
 	/**
