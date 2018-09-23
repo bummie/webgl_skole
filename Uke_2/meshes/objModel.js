@@ -14,7 +14,7 @@ function ObjModel(data)
 
     const modelViewMatrix = mat4.create();
     const normalMatrix = mat4.create();
-
+    
     /**
      * TODO:: Clean up function
      * Draws the mesh to the canvas

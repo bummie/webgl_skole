@@ -53,6 +53,11 @@ function UIHandler()
         document.getElementById("directionalVectorZ")
     ]
 
+    this.ambientValues = document.getElementById("ambientValues");
+    this.directionalColorValues = document.getElementById("directionalColorValues");
+    this.directionValues = document.getElementById("directionValues");
+
+
     // Functions
 
     /**

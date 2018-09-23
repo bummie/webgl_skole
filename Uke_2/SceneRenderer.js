@@ -14,6 +14,12 @@ function SceneRenderer()
 	let sceneObjects = [];
 	let then = 0;
 
+	let lighting = {
+		AmbientLight: [0.3, 0.3, 0.3],
+		DirectionalLightColor: [1, 1, 1],
+		DirectionalVector: [0.85, 0.8, 0.75]
+	};
+
 	this.main = function() 
 	{
 		if (gl === null) 
@@ -115,6 +121,7 @@ function SceneRenderer()
 		then = now;
 		
 		this.updateCameraUI();
+		this.updateLightValuesUI();
 		this.draw(gl, programInfo, deltaTime);
 
 		requestAnimationFrame(this.render.bind(this));
@@ -136,7 +143,10 @@ function SceneRenderer()
 			uniformLocations: {
 				projectionMatrix: gl.getUniformLocation(shaderProgram, 'uProjectionMatrix'),
 				modelViewMatrix: gl.getUniformLocation(shaderProgram, 'uModelViewMatrix'),
-				normalMatrix: gl.getUniformLocation(shaderProgram, 'uNormalMatrix')
+				normalMatrix: gl.getUniformLocation(shaderProgram, 'uNormalMatrix'),
+				ambientLight: gl.getUniformLocation(shaderProgram, 'uAmbientLight'),
+				directionalLightColor: gl.getUniformLocation(shaderProgram, 'uDirectionalLightColor'),
+				directionalVector: gl.getUniformLocation(shaderProgram, 'uDirectionalVector')
 			}
 		};
 	}
@@ -157,11 +167,22 @@ function SceneRenderer()
 		gl.useProgram(programInfo.program);
 
 		camera.updateProjectionMatrix(gl);
+		this.updateLightData();
 
 		sceneObjects.forEach(function(object) 
 		{
 			object.draw(gl, programInfo, camera.projectionMatrix);
 		});	
+	}
+
+	/**
+	 * Updates the lighting data on the GPU
+	 */
+	this.updateLightData = function()
+	{
+		gl.uniform3fv(programInfo.uniformLocations.ambientLight, lighting.AmbientLight);
+		gl.uniform3fv(programInfo.uniformLocations.directionalLightColor, lighting.DirectionalLightColor);
+		gl.uniform3fv(programInfo.uniformLocations.directionalVector, lighting.DirectionalVector);
 	}
 
 	/**
@@ -224,6 +245,16 @@ function SceneRenderer()
 	}
 
 	/**
+	 * Updates the UI with data from the camera object
+	 */
+	this.updateLightValuesUI = function()
+	{
+		ui.ambientValues.innerHTML = `${lighting.AmbientLight}`;
+		ui.directionalColorValues.innerHTML = `${lighting.DirectionalLightColor}`;
+		ui.directionValues.innerHTML = `${lighting.DirectionalVector}`;
+	}
+
+	/**
 	 * Updates the ui values on selected object change
 	 */
 	let updateObjectToUI = function()
@@ -256,19 +287,16 @@ function SceneRenderer()
 
 		let objectIndex = ui.selectObject.selectedIndex;
 
-		sceneObjects[objectIndex].position[0] = ui.position[0].value;
-		sceneObjects[objectIndex].position[1] = ui.position[1].value;
-		sceneObjects[objectIndex].position[2] = ui.position[2].value;
-
-		sceneObjects[objectIndex].rotation[0] = ui.rotation[0].value;
-		sceneObjects[objectIndex].rotation[1] = ui.rotation[1].value;
-		sceneObjects[objectIndex].rotation[2] = ui.rotation[2].value;
-
-		sceneObjects[objectIndex].scale[0] = ui.scale[0].value;
-		sceneObjects[objectIndex].scale[1] = ui.scale[1].value;
-		sceneObjects[objectIndex].scale[2] = ui.scale[2].value;
-
+		sceneObjects[objectIndex].position = [ui.position[0].value, ui.position[1].value, ui.position[2].value];
+		sceneObjects[objectIndex].rotation = [ui.rotation[0].value, ui.rotation[1].value, ui.rotation[2].value];
+		sceneObjects[objectIndex].scale = [ui.scale[0].value, ui.scale[1].value, ui.scale[2].value];
+		
 		camera.fov = ui.fovSlider.value;
+
+		lighting.AmbientLight = [ui.ambientLight[0].value, ui.ambientLight[1].value, ui.ambientLight[2].value];
+		lighting.DirectionalLightColor = [ui.directionalLightColor[0].value, ui.directionalLightColor[1].value, ui.directionalLightColor[2].value];
+		lighting.DirectionalVector = [ui.directionalVector[0].value, ui.directionalVector[1].value, ui.directionalVector[2].value];
+
 	}
 
 	/**
