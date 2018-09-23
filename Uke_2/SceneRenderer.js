@@ -90,6 +90,16 @@ function SceneRenderer()
 			case 39:
 				camera.rotation[1] += rotateAmount;
 			break;
+
+			// Z-Axis
+			case 81:
+				camera.rotation[2] -= rotateAmount;
+			break;
+
+			// Z-Axis
+			case 69:
+				camera.rotation[2] += rotateAmount;
+			break;
 			
 		}
 	}
@@ -193,11 +203,11 @@ function SceneRenderer()
 	 */
 	this.updateCameraUI = function()
 	{
-		ui.camPosition.innerHTML = `Position ${camera.position}`;
-		ui.camRotation.innerHTML = `Rotation ${camera.rotation}`;
-		ui.camScale.innerHTML = `Scale ${camera.scale}`;
+		ui.camPosition.innerHTML = `${camera.position}`;
+		ui.camRotation.innerHTML = `${camera.rotation}`;
+		ui.camScale.innerHTML = `${camera.scale}`;
 		
-		ui.fovValue.innerHTML = `FOV: ${camera.fov}`;
+		ui.fovValue.innerHTML = `${camera.fov}`;
 	}
 
 	/**
@@ -229,6 +239,8 @@ function SceneRenderer()
 	 */
 	this.updateUIToObject = function()
 	{
+		if(sceneObjects.length <= 0) { return; }
+
 		let objectIndex = ui.selectObject.selectedIndex;
 
 		sceneObjects[objectIndex].position[0] = ui.position[0].value;

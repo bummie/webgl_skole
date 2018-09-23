@@ -1,6 +1,7 @@
 <body style="background: grey; color: black;">
     <canvas id="glCanvas" width="720" height="480"></canvas>
 
+    <h3>Model</h3>
     <table>
         <tr>
             <td><select id="selectSpawn">
@@ -53,12 +54,22 @@
     </table>
 
     <h3>Camera</h3>
-    <div id="fovValue">FOV: 45 </div><input id="fovSlider" type="range" min="1" max="100" value="45">
-    <div id="camPosition">Position</div>
-    <div id="camRotation">Rotation</div>
-    <div id="camScale">Scale</div>
-
-    <h3>Ligth</h3>
+    <table>
+        <tr>
+            <td><div id="fovValue"></div></td>
+            <td>Position</td>
+            <td>Rotation</td>
+            <td>Scale</td>
+        </tr>
+        <tr>
+            <td><input id="fovSlider" type="range" min="1" max="100" value="45"></td>
+            <td><div id="camPosition"></div></td>
+            <td><div id="camRotation"></div></td>
+            <td><div id="camScale"></div></td>
+        </tr>
+    </table>
+    
+    <h3>Light</h3>
 
     <!-- Javascript files-->
     <!-- Dependencies -->
