@@ -11,9 +11,6 @@ const vsSource = `
     
 	varying lowp vec4 vColor;
     varying highp vec3 vLighting;
-
-	varying float x;
-    varying float y;
     
     void main(void) 
     {

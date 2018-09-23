@@ -1,5 +1,6 @@
 function UIHandler()
 {
+    // Object
     this.selectSpawn = document.getElementById("selectSpawn");
     this.selectObject = document.getElementById("selectObject");
     this.selectDrawType = document.getElementById("selectDrawType");
@@ -25,6 +26,7 @@ function UIHandler()
         document.getElementById("inScaleZ")
     ];
 
+    // Camera
     this.camPosition = document.getElementById("camPosition");
     this.camRotation = document.getElementById("camRotation");
     this.camScale = document.getElementById("camScale");
@@ -32,6 +34,27 @@ function UIHandler()
     this.fovValue = document.getElementById("fovValue");
     this.fovSlider = document.getElementById("fovSlider");
     
+    //Lighting
+    this.ambientLight = [
+        document.getElementById("ambientLightX"),
+        document.getElementById("ambientLightY"),
+        document.getElementById("ambientLightZ")
+    ]
+
+    this.directionalLightColor = [
+        document.getElementById("directionalLightColorX"),
+        document.getElementById("directionalLightColorY"),
+        document.getElementById("directionalLightColorZ")
+    ]
+
+    this.directionalVector = [
+        document.getElementById("directionalVectorX"),
+        document.getElementById("directionalVectorY"),
+        document.getElementById("directionalVectorZ")
+    ]
+
+    // Functions
+
     /**
      * Adds object to the UI dropdown
      * @param {*} title 

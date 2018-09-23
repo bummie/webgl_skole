@@ -187,6 +187,18 @@ function SceneRenderer()
 		ui.scale[2].addEventListener("change", this.updateUIToObject);
 
 		ui.fovSlider.addEventListener("change", this.updateUIToObject);
+
+		ui.ambientLight[0].addEventListener("change", this.updateUIToObject);
+		ui.ambientLight[1].addEventListener("change", this.updateUIToObject);
+		ui.ambientLight[2].addEventListener("change", this.updateUIToObject);
+
+		ui.directionalLightColor[0].addEventListener("change", this.updateUIToObject);
+		ui.directionalLightColor[1].addEventListener("change", this.updateUIToObject);
+		ui.directionalLightColor[2].addEventListener("change", this.updateUIToObject);
+
+		ui.directionalVector[0].addEventListener("change", this.updateUIToObject);
+		ui.directionalVector[1].addEventListener("change", this.updateUIToObject);
+		ui.directionalVector[2].addEventListener("change", this.updateUIToObject);
 	}	
 
 	/**
