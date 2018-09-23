@@ -8,6 +8,9 @@ function ObjModel(data)
     this.rotation = [ 0, 0, 0 ];
     this.scale = [ 1, 1, 1 ];
 
+    this.spin = false;
+    this.spinIncrement = 0.01;
+
     this.drawType = 4;
     this.faceCount = this.faceList.length;
 	this.offset = 0;
@@ -25,6 +28,16 @@ function ObjModel(data)
      */
     this.draw = function(gl, programInfo, projectionMatrix)
     {   
+        if(this.rotation[0] >= 360 || this.rotation[0] <= -360 ) { this.rotation[0] = 0; }
+        if(this.rotation[1] >= 360 || this.rotation[1] <= -360 ) { this.rotation[1] = 0; }
+        if(this.rotation[2] >= 360 || this.rotation[2] <= -360 ) { this.rotation[2] = 0; }
+
+        if(this.spin)
+        {   
+            this.rotation[0] += this.spinIncrement;
+            this.rotation[2] += this.spinIncrement;
+        }
+
         mat4.identity(modelViewMatrix);
 
         mat4.rotate(modelViewMatrix, modelViewMatrix, this.rotation[0], [1, 0, 0]);

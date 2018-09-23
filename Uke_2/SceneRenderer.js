@@ -203,6 +203,8 @@ function SceneRenderer()
 		ui.rotation[1].addEventListener("change", this.updateUIToObject);
 		ui.rotation[2].addEventListener("change", this.updateUIToObject);
 
+		ui.shouldRotate.addEventListener("change", this.updateUIToObject);
+
 		ui.scale[0].addEventListener("change", this.updateUIToObject);
 		ui.scale[1].addEventListener("change", this.updateUIToObject);
 		ui.scale[2].addEventListener("change", this.updateUIToObject);
@@ -272,6 +274,8 @@ function SceneRenderer()
 		ui.rotation[0].value = sceneObjects[objectIndex].rotation[0];
 		ui.rotation[1].value = sceneObjects[objectIndex].rotation[1];
 		ui.rotation[2].value = sceneObjects[objectIndex].rotation[2];
+		
+	 	ui.shouldRotate.checked = sceneObjects[objectIndex].spin;
 
 		ui.scale[0].value = sceneObjects[objectIndex].scale[0];
 		ui.scale[1].value = sceneObjects[objectIndex].scale[1];
@@ -287,15 +291,16 @@ function SceneRenderer()
 
 		let objectIndex = ui.selectObject.selectedIndex;
 
-		sceneObjects[objectIndex].position = [ui.position[0].value, ui.position[1].value, ui.position[2].value];
-		sceneObjects[objectIndex].rotation = [ui.rotation[0].value, ui.rotation[1].value, ui.rotation[2].value];
-		sceneObjects[objectIndex].scale = [ui.scale[0].value, ui.scale[1].value, ui.scale[2].value];
-		
+		sceneObjects[objectIndex].position = [Number(ui.position[0].value), Number(ui.position[1].value), Number(ui.position[2].value)];
+		sceneObjects[objectIndex].rotation = [Number(ui.rotation[0].value), Number(ui.rotation[1].value), Number(ui.rotation[2].value)];
+		sceneObjects[objectIndex].scale = [Number(ui.scale[0].value), Number(ui.scale[1].value), Number(ui.scale[2].value)];
+		sceneObjects[objectIndex].spin = ui.shouldRotate.checked;
+
 		camera.fov = ui.fovSlider.value;
 
-		lighting.AmbientLight = [ui.ambientLight[0].value, ui.ambientLight[1].value, ui.ambientLight[2].value];
-		lighting.DirectionalLightColor = [ui.directionalLightColor[0].value, ui.directionalLightColor[1].value, ui.directionalLightColor[2].value];
-		lighting.DirectionalVector = [ui.directionalVector[0].value, ui.directionalVector[1].value, ui.directionalVector[2].value];
+		lighting.AmbientLight = [Number(ui.ambientLight[0].value), Number(ui.ambientLight[1].value), Number(ui.ambientLight[2].value)];
+		lighting.DirectionalLightColor = [Number(ui.directionalLightColor[0].value), Number(ui.directionalLightColor[1].value), Number(ui.directionalLightColor[2].value)];
+		lighting.DirectionalVector = [Number(ui.directionalVector[0].value), Number(ui.directionalVector[1].value), Number(ui.directionalVector[2].value)];
 
 	}
 

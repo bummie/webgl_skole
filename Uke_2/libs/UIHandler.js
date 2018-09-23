@@ -20,6 +20,8 @@ function UIHandler()
         document.getElementById("inRotZ")
     ];
 
+    this.shouldRotate = document.getElementById("shouldRotate");
+
     this.scale = [
         document.getElementById("inScaleX"),
         document.getElementById("inScaleY"),
