@@ -13,8 +13,10 @@ function ObjModel(data)
 	this.offset = 0;
 
     const modelViewMatrix = mat4.create();
+    const normalMatrix = mat4.create();
 
     /**
+     * TODO:: Clean up function
      * Draws the mesh to the canvas
      * @param {*} gl 
      * @param {*} programInfo 
@@ -22,7 +24,7 @@ function ObjModel(data)
      * @param {*} modelViewMatrix 
      */
     this.draw = function(gl, programInfo, projectionMatrix)
-    {
+    {   
         mat4.identity(modelViewMatrix);
 
         mat4.rotate(modelViewMatrix, modelViewMatrix, this.rotation[0], [1, 0, 0]);
@@ -30,6 +32,9 @@ function ObjModel(data)
         mat4.rotate(modelViewMatrix, modelViewMatrix, this.rotation[2], [0, 0, 1]);
 		mat4.scale(modelViewMatrix, modelViewMatrix, this.scale);
 		mat4.translate(modelViewMatrix, modelViewMatrix, this.position); 
+
+        mat4.invert(normalMatrix, modelViewMatrix);
+        mat4.transpose(normalMatrix, normalMatrix);
 
         buffers = this.initBuffer(gl);
 
@@ -67,8 +72,8 @@ function ObjModel(data)
         // Set the shader uniforms
         gl.uniformMatrix4fv(programInfo.uniformLocations.projectionMatrix, false, projectionMatrix);
         gl.uniformMatrix4fv(programInfo.uniformLocations.modelViewMatrix, false, modelViewMatrix);
-          
-        //gl.drawArrays(gl.POINTS, 0, this.vertexList.length/3);
+        gl.uniformMatrix4fv(programInfo.uniformLocations.normalMatrix, false, normalMatrix);
+        
         gl.drawElements(this.drawType, this.faceCount, gl.UNSIGNED_SHORT, this.offset);
     }
 

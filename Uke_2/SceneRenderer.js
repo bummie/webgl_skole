@@ -136,6 +136,7 @@ function SceneRenderer()
 			uniformLocations: {
 				projectionMatrix: gl.getUniformLocation(shaderProgram, 'uProjectionMatrix'),
 				modelViewMatrix: gl.getUniformLocation(shaderProgram, 'uModelViewMatrix'),
+				normalMatrix: gl.getUniformLocation(shaderProgram, 'uNormalMatrix')
 			}
 		};
 	}
