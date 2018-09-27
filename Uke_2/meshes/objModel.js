@@ -23,10 +23,9 @@ function ObjModel(data)
      * Draws the mesh to the canvas
      * @param {*} gl 
      * @param {*} programInfo 
-     * @param {*} projectionMatrix 
      * @param {*} modelViewMatrix 
      */
-    this.draw = function(gl, programInfo, projectionMatrix)
+    this.draw = function(gl, programInfo)
     {   
         if(this.rotation[0] >= 360 || this.rotation[0] <= -360 ) { this.rotation[0] = 0; }
         if(this.rotation[1] >= 360 || this.rotation[1] <= -360 ) { this.rotation[1] = 0; }
@@ -83,7 +82,6 @@ function ObjModel(data)
 		gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, buffers.faceBuffer);
 
         // Set the shader uniforms
-        gl.uniformMatrix4fv(programInfo.uniformLocations.projectionMatrix, false, projectionMatrix);
         gl.uniformMatrix4fv(programInfo.uniformLocations.modelViewMatrix, false, modelViewMatrix);
         gl.uniformMatrix4fv(programInfo.uniformLocations.normalMatrix, false, normalMatrix);
         

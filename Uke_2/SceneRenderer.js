@@ -172,11 +172,12 @@ function SceneRenderer()
 		gl.useProgram(programInfo.program);
 
 		camera.updateProjectionMatrix(gl);
+		gl.uniformMatrix4fv(programInfo.uniformLocations.projectionMatrix, false, camera.projectionMatrix);
 		this.updateLightData();
 
 		sceneObjects.forEach(function(object) 
 		{
-			object.draw(gl, programInfo, camera.projectionMatrix);
+			object.draw(gl, programInfo);
 		});	
 	}
 
