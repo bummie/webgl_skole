@@ -11,14 +11,14 @@ function SceneRenderer()
 	let shaderProgram;
 	let programInfo;
 
-	let sceneObjects = [];
+	let nodeRoot = null;
 	let then = 0;
 
 	let lighting = {
 		AmbientLight: [0.3, 0.3, 0.3],
 		DirectionalLightColor: [1, 1, 1],
 		DirectionalVector: [0.85, 0.8, 0.75]
-	};
+	}
 
 	this.main = function() 
 	{
@@ -33,6 +33,7 @@ function SceneRenderer()
 
 		this.addListeners();
 
+		nodeRoot = new Node(new NoMesh());
 		spawnObject(new Cube(), "Cube");
 
 		requestAnimationFrame(this.render.bind(this));
@@ -175,9 +176,9 @@ function SceneRenderer()
 		gl.uniformMatrix4fv(programInfo.uniformLocations.projectionMatrix, false, camera.projectionMatrix);
 		this.updateLightData();
 
-		sceneObjects.forEach(function(object) 
+		nodeRoot.Children.forEach(function(node) 
 		{
-			object.draw(gl, programInfo);
+			node.Object.draw(gl, programInfo);
 		});	
 	}
 
@@ -236,7 +237,7 @@ function SceneRenderer()
 	 */
 	this.updateDrawType = function()
 	{
-		if(sceneObjects.length <= 0) { return; }
+		if(nodeRoot.Children.length <= 0) { return; }
 
 		sceneObjects[ui.selectObject.selectedIndex].drawType = ui.selectDrawType.value;
 	}
@@ -268,25 +269,25 @@ function SceneRenderer()
 	 */
 	let updateObjectToUI = function()
 	{
-		if(sceneObjects.length <= 0) { return; }
+		if(nodeRoot.Children.length <= 0) { return; }
 
 		let objectIndex = ui.selectObject.selectedIndex;
 
-		ui.selectDrawType.value = sceneObjects[objectIndex].drawType;
+		ui.selectDrawType.value = nodeRoot.Children[objectIndex].drawType;
 
-		ui.position[0].value = sceneObjects[objectIndex].position[0];
-		ui.position[1].value = sceneObjects[objectIndex].position[1];
-		ui.position[2].value = sceneObjects[objectIndex].position[2];
-
-		ui.rotation[0].value = sceneObjects[objectIndex].rotation[0];
-		ui.rotation[1].value = sceneObjects[objectIndex].rotation[1];
-		ui.rotation[2].value = sceneObjects[objectIndex].rotation[2];
+		ui.position[0].value = nodeRoot.Children[objectIndex].Object.position[0];
+		ui.position[1].value = nodeRoot.Children[objectIndex].Object.position[1];
+		ui.position[2].value = nodeRoot.Children[objectIndex].Object.position[2];
 		
-	 	ui.shouldRotate.checked = sceneObjects[objectIndex].spin;
+		ui.rotation[0].value = nodeRoot.Children[objectIndex].Object.rotation[0];
+		ui.rotation[1].value = nodeRoot.Children[objectIndex].Object.rotation[1];
+		ui.rotation[2].value = nodeRoot.Children[objectIndex].Object.rotation[2];
+		
+	 	ui.shouldRotate.checked = nodeRoot.Children[objectIndex].spin;
 
-		ui.scale[0].value = sceneObjects[objectIndex].scale[0];
-		ui.scale[1].value = sceneObjects[objectIndex].scale[1];
-		ui.scale[2].value = sceneObjects[objectIndex].scale[2];
+		ui.scale[0].value = nodeRoot.Children[objectIndex].Object.scale[0];
+		ui.scale[1].value = nodeRoot.Children[objectIndex].Object.scale[1];
+		ui.scale[2].value = nodeRoot.Children[objectIndex].Object.scale[2];
 	}
 
 	/**
@@ -294,21 +295,20 @@ function SceneRenderer()
 	 */
 	this.updateUIToObject = function()
 	{
-		if(sceneObjects.length <= 0) { return; }
+		if(nodeRoot.Children.length <= 0) { return; }
 
 		let objectIndex = ui.selectObject.selectedIndex;
 
-		sceneObjects[objectIndex].position = [Number(ui.position[0].value), Number(ui.position[1].value), Number(ui.position[2].value)];
-		sceneObjects[objectIndex].rotation = [Number(ui.rotation[0].value), Number(ui.rotation[1].value), Number(ui.rotation[2].value)];
-		sceneObjects[objectIndex].scale = [Number(ui.scale[0].value), Number(ui.scale[1].value), Number(ui.scale[2].value)];
-		sceneObjects[objectIndex].spin = ui.shouldRotate.checked;
+		nodeRoot.Children[objectIndex].Object.position = [Number(ui.position[0].value), Number(ui.position[1].value), Number(ui.position[2].value)];
+		nodeRoot.Children[objectIndex].Object.rotation = [Number(ui.rotation[0].value), Number(ui.rotation[1].value), Number(ui.rotation[2].value)];
+		nodeRoot.Children[objectIndex].Object.scale = [Number(ui.scale[0].value), Number(ui.scale[1].value), Number(ui.scale[2].value)];
+		nodeRoot.Children[objectIndex].Object.spin = ui.shouldRotate.checked;
 
 		camera.fov = ui.fovSlider.value;
 
 		lighting.AmbientLight = [Number(ui.ambientLight[0].value), Number(ui.ambientLight[1].value), Number(ui.ambientLight[2].value)];
 		lighting.DirectionalLightColor = [Number(ui.directionalLightColor[0].value), Number(ui.directionalLightColor[1].value), Number(ui.directionalLightColor[2].value)];
 		lighting.DirectionalVector = [Number(ui.directionalVector[0].value), Number(ui.directionalVector[1].value), Number(ui.directionalVector[2].value)];
-
 	}
 
 	/**
@@ -330,7 +330,7 @@ function SceneRenderer()
 	 */
 	function spawnObject(object, title)
 	{
-		sceneObjects.push(object);
+		nodeRoot.Children.push(new Node(object, nodeRoot));
 		ui.addOption(title);
 		updateObjectToUI();
 	}
@@ -341,7 +341,7 @@ function SceneRenderer()
 	 */
 	this.loadModelFromFile = function(data, title)
 	{
-		sceneObjects.push(new ObjModel(data));
+		nodeRoot.Children.push(new Node(new ObjModel(data), nodeRoot));
 		ui.addOption(title);
 		updateObjectToUI();
 	}
@@ -351,12 +351,12 @@ function SceneRenderer()
 	 */
 	this.deleteModel = function()
 	{
-		if(sceneObjects.length <= 0) { return; }
+		if(nodeRoot.Children.length <= 0) { return; }
 
 		console.log("Deleted object");
 		let objectIndex = ui.selectObject.selectedIndex;
 
-		sceneObjects.splice(objectIndex, 1);
+		nodeRoot.Children.splice(objectIndex, 1);
 		ui.selectObject.remove(objectIndex);
 	}
 }

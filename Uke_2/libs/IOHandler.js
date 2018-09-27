@@ -49,11 +49,10 @@ function IOHandler(scene)
         case 'f':
           for(let i = 1; i <= vertexDataCount; i++)
           {
-			fList.push(parseInt(lineSplit[i].split('/')[0])-1);
-			//TODO:: Load more face data
-			//fList.push(parseInt(lineSplit[i].split('/')[1])-1);
-			//fList.push(parseInt(lineSplit[i].split('/')[2])-1);
-
+            fList.push(parseInt(lineSplit[i].split('/')[0])-1);
+            //TODO:: Load more face data
+            //fList.push(parseInt(lineSplit[i].split('/')[1])-1);
+            //fList.push(parseInt(lineSplit[i].split('/')[2])-1);
           };
         break;
       } 
