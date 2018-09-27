@@ -25,7 +25,7 @@ function ObjModel(data)
      * @param {*} programInfo 
      * @param {*} modelViewMatrix 
      */
-    this.draw = function(gl, programInfo)
+    this.draw = function(parent, gl, programInfo)
     {   
         if(this.rotation[0] >= 360 || this.rotation[0] <= -360 ) { this.rotation[0] = 0; }
         if(this.rotation[1] >= 360 || this.rotation[1] <= -360 ) { this.rotation[1] = 0; }

@@ -9,7 +9,7 @@ function NoMesh()
      * @param {*} gl 
      * @param {*} programInfo 
      */
-    this.draw = function(gl, programInfo)
+    this.draw = function(parent, gl, programInfo)
     {   
         
     }

@@ -176,10 +176,11 @@ function SceneRenderer()
 		gl.uniformMatrix4fv(programInfo.uniformLocations.projectionMatrix, false, camera.projectionMatrix);
 		this.updateLightData();
 
-		nodeRoot.Children.forEach(function(node) 
+		nodeRoot.draw(gl, programInfo);
+		/*nodeRoot.Children.forEach(function(node) 
 		{
 			node.Object.draw(gl, programInfo);
-		});	
+		});*/	
 	}
 
 	/**
