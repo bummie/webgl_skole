@@ -32,6 +32,9 @@ function SceneRenderer()
 		programInfo = this.initProgramInfo(gl, shaderProgram);
 
 		this.addListeners();
+
+		spawnObject(new Cube(), "Cube");
+
 		requestAnimationFrame(this.render.bind(this));
 	}
 
@@ -314,10 +317,18 @@ function SceneRenderer()
 		//alert(modelPath);
 		io.loadFile(modelPath, (obj) =>
 		{
-			sceneObjects.push(new ObjModel(obj));
-			ui.addOption(title);
-			updateObjectToUI();
+			spawnObject(new ObjModel(obj), title);
 		});
+	}
+
+	/**
+	 * Spawns object given
+	 */
+	function spawnObject(object, title)
+	{
+		sceneObjects.push(object);
+		ui.addOption(title);
+		updateObjectToUI();
 	}
 
 	/**
