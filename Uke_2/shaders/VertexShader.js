@@ -7,11 +7,12 @@ const vsSource = `
 
     uniform mat4 uModelViewMatrix;
     uniform mat4 uProjectionMatrix;
-    uniform mat4 uNormalMatrix;
+	uniform mat4 uNormalMatrix;
 
     uniform highp vec3 uAmbientLight;
     uniform highp vec3 uDirectionalLightColor;
-    uniform highp vec3 uDirectionalVector;
+	uniform highp vec3 uDirectionalVector;
+	uniform highp float uTime;
 
 	varying lowp vec4 vColor;
     varying highp vec3 vLighting;

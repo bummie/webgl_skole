@@ -149,7 +149,9 @@ function SceneRenderer()
 				normalMatrix: gl.getUniformLocation(shaderProgram, 'uNormalMatrix'),
 				ambientLight: gl.getUniformLocation(shaderProgram, 'uAmbientLight'),
 				directionalLightColor: gl.getUniformLocation(shaderProgram, 'uDirectionalLightColor'),
-				directionalVector: gl.getUniformLocation(shaderProgram, 'uDirectionalVector')
+				directionalVector: gl.getUniformLocation(shaderProgram, 'uDirectionalVector'),
+				time: gl.getUniformLocation(shaderProgram, 'uTime')
+
 			}
 		};
 	}
@@ -186,6 +188,7 @@ function SceneRenderer()
 		gl.uniform3fv(programInfo.uniformLocations.ambientLight, lighting.AmbientLight);
 		gl.uniform3fv(programInfo.uniformLocations.directionalLightColor, lighting.DirectionalLightColor);
 		gl.uniform3fv(programInfo.uniformLocations.directionalVector, lighting.DirectionalVector);
+		gl.uniform1f(programInfo.uniformLocations.time, new Date().getTime());
 	}
 
 	/**
