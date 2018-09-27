@@ -8,6 +8,7 @@ function Node(object, parent)
     {
         if(this.Children.length <= 0) 
         {
+           // console.log(this);
             this.Object.draw(this.Parent, gl, programInfo);
             return;
         }
@@ -15,6 +16,8 @@ function Node(object, parent)
         this.Children.forEach(function(node) 
 		{
             node.draw(gl, programInfo);
-		});	
+        });
+        
+        this.Object.draw(this.Parent, gl, programInfo);
     }
 }

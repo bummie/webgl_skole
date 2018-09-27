@@ -96,7 +96,7 @@ function Cube()
     this.faceCount = this.faceList.length;
 	this.offset = 0;
 
-    const modelViewMatrix = mat4.create();
+    this.modelViewMatrix = mat4.create();
     const normalMatrix = mat4.create();
     
     /**
@@ -118,15 +118,9 @@ function Cube()
             this.rotation[2] += this.spinIncrement;
         }
 
-        mat4.identity(modelViewMatrix);
+        this.getTransformMatrix(parent);
 
-        mat4.rotate(modelViewMatrix, modelViewMatrix, this.rotation[0], [1, 0, 0]);
-        mat4.rotate(modelViewMatrix, modelViewMatrix, this.rotation[1], [0, 1, 0]);
-        mat4.rotate(modelViewMatrix, modelViewMatrix, this.rotation[2], [0, 0, 1]);
-		mat4.scale(modelViewMatrix, modelViewMatrix, this.scale);
-		mat4.translate(modelViewMatrix, modelViewMatrix, this.position); 
-
-        mat4.invert(normalMatrix, modelViewMatrix);
+        mat4.invert(normalMatrix, this.modelViewMatrix);
         mat4.transpose(normalMatrix, normalMatrix);
 
         buffers = this.initBuffer(gl);
@@ -163,10 +157,28 @@ function Cube()
 		gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, buffers.faceBuffer);
 
         // Set the shader uniforms
-        gl.uniformMatrix4fv(programInfo.uniformLocations.modelViewMatrix, false, modelViewMatrix);
+        gl.uniformMatrix4fv(programInfo.uniformLocations.modelViewMatrix, false, this.modelViewMatrix);
         gl.uniformMatrix4fv(programInfo.uniformLocations.normalMatrix, false, normalMatrix);
         
         gl.drawElements(this.drawType, this.faceCount, gl.UNSIGNED_SHORT, this.offset);
+    }
+
+    /**
+     * Returns the transformmatrix
+     */
+    this.getTransformMatrix = function(parent)
+    {
+        mat4.identity(this.modelViewMatrix);
+
+        mat4.rotate(this.modelViewMatrix, this.modelViewMatrix, this.rotation[0], [1, 0, 0]);
+        mat4.rotate(this.modelViewMatrix, this.modelViewMatrix, this.rotation[1], [0, 1, 0]);
+        mat4.rotate(this.modelViewMatrix, this.modelViewMatrix, this.rotation[2], [0, 0, 1]);
+		mat4.scale(this.modelViewMatrix, this.modelViewMatrix, this.scale);
+        mat4.translate(this.modelViewMatrix, this.modelViewMatrix, this.position); 
+        
+        mat4.multiply(this.modelViewMatrix, parent.Object.getTransformMatrix(parent.Parent), this.modelViewMatrix);
+
+        return this.modelViewMatrix;
     }
 
     /**

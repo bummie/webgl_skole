@@ -34,7 +34,15 @@ function SceneRenderer()
 		this.addListeners();
 
 		nodeRoot = new Node(new NoMesh());
-		spawnObject(new Cube(), "Cube");
+		
+		let node1 = new Node(new Cube(), nodeRoot);
+		let node2 = new Node(new Cube(), node1);
+		node2.Object.rotation[1] = 3;
+
+		spawnObject(node1, "Banana");
+		spawnObject(node2, "Cube");
+
+		console.log(nodeRoot);
 
 		requestAnimationFrame(this.render.bind(this));
 	}
@@ -240,7 +248,7 @@ function SceneRenderer()
 	{
 		if(nodeRoot.Children.length <= 0) { return; }
 
-		sceneObjects[ui.selectObject.selectedIndex].drawType = ui.selectDrawType.value;
+		nodeRoot.Children[ui.selectObject.selectedIndex].Object.drawType = ui.selectDrawType.value;
 	}
 
 	/**
@@ -274,7 +282,7 @@ function SceneRenderer()
 
 		let objectIndex = ui.selectObject.selectedIndex;
 
-		ui.selectDrawType.value = nodeRoot.Children[objectIndex].drawType;
+		ui.selectDrawType.value = nodeRoot.Children[objectIndex].Object.drawType;
 
 		ui.position[0].value = nodeRoot.Children[objectIndex].Object.position[0];
 		ui.position[1].value = nodeRoot.Children[objectIndex].Object.position[1];
@@ -322,18 +330,21 @@ function SceneRenderer()
 		//alert(modelPath);
 		io.loadFile(modelPath, (obj) =>
 		{
-			spawnObject(new ObjModel(obj), title);
+			spawnObject(new Node(new ObjModel(obj), nodeRoot), title);
 		});
 	}
 
 	/**
 	 * Spawns object given
 	 */
-	function spawnObject(object, title)
+	function spawnObject(node, title)
 	{
-		nodeRoot.Children.push(new Node(object, nodeRoot));
-		ui.addOption(title);
-		updateObjectToUI();
+		node.Parent.Children.push(node);
+		if(node.Parent === nodeRoot) 
+		{
+			ui.addOption(title);
+			updateObjectToUI();
+		}
 	}
 
 	/**
