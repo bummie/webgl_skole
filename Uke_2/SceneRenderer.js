@@ -35,9 +35,9 @@ function SceneRenderer()
 
 		nodeRoot = new Node(new NoMesh());
 		
-		let node1 = new Node(new Cube(), nodeRoot);
-		let node2 = new Node(new Cube(), node1);
-		node2.Object.rotation[1] = 3;
+		let node1 = new Node(Cube(), nodeRoot);
+		let node2 = new Node(Cube(), node1);
+		node2.Object.position[0] = 2;
 
 		spawnObject(node1, "Banana");
 		spawnObject(node2, "Cube");

@@ -21,3 +21,5 @@ function Node(object, parent)
         this.Object.draw(this.Parent, gl, programInfo);
     }
 }
+
+//TODO:: Remove CUBE and just throw in data somehow yo reuse meshfile
