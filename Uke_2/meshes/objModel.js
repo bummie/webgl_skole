@@ -9,7 +9,7 @@ function ObjModel(data)
     this.scale = [ 1, 1, 1 ];
 
     this.spin = false;
-    this.spinIncrement = 0.01;
+    this.spinIncrement = 1;
 
     this.drawType = 4;
     this.faceCount = this.faceList.length;
@@ -90,9 +90,9 @@ function ObjModel(data)
     {
         mat4.identity(this.modelViewMatrix);
 
-        mat4.rotate(this.modelViewMatrix, this.modelViewMatrix, this.rotation[0], [1, 0, 0]);
-        mat4.rotate(this.modelViewMatrix, this.modelViewMatrix, this.rotation[1], [0, 1, 0]);
-        mat4.rotate(this.modelViewMatrix, this.modelViewMatrix, this.rotation[2], [0, 0, 1]);
+        mat4.rotate(this.modelViewMatrix, this.modelViewMatrix, glMatrix.toRadian(this.rotation[0]), [1, 0, 0]);
+        mat4.rotate(this.modelViewMatrix, this.modelViewMatrix, glMatrix.toRadian(this.rotation[1]), [0, 1, 0]);
+        mat4.rotate(this.modelViewMatrix, this.modelViewMatrix, glMatrix.toRadian(this.rotation[2]), [0, 0, 1]);
 		mat4.scale(this.modelViewMatrix, this.modelViewMatrix, this.scale);
         mat4.translate(this.modelViewMatrix, this.modelViewMatrix, this.position); 
        

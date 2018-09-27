@@ -35,15 +35,7 @@ function SceneRenderer()
 
 		nodeRoot = new Node(new NoMesh());
 		
-		let node1 = new Node(Cube(), nodeRoot);
-		let node2 = new Node(Cube(), node1);
-		node2.Object.position[0] = 2;
-
-		spawnObject(node1, "Banana");
-		spawnObject(node2, "Cube");
-
-		console.log(nodeRoot);
-
+		this.spawnRobot();
 		requestAnimationFrame(this.render.bind(this));
 	}
 
@@ -185,10 +177,6 @@ function SceneRenderer()
 		this.updateLightData();
 
 		nodeRoot.draw(gl, programInfo);
-		/*nodeRoot.Children.forEach(function(node) 
-		{
-			node.Object.draw(gl, programInfo);
-		});*/	
 	}
 
 	/**
@@ -370,5 +358,58 @@ function SceneRenderer()
 
 		nodeRoot.Children.splice(objectIndex, 1);
 		ui.selectObject.remove(objectIndex);
+	}
+
+	/**
+	 * Spawns robot
+	 */
+	this.spawnRobot = function()
+	{
+		let torso = new Node(Cube(), nodeRoot);
+		let head = new Node(Cube(), torso);
+		let leg1 = new Node(Cube(), torso);
+		let leg2 = new Node(Cube(), torso);
+		let arm1 = new Node(Cube(), torso);
+		let arm2 = new Node(Cube(), torso);
+
+		// Torso
+		torso.Object.scale[2] = .5;
+
+		// Head
+		head.Object.position[1] = 2.5;
+		head.Object.scale[0] = .5;
+		head.Object.scale[1] = .5;
+
+		// Legs
+		leg1.Object.position[0] = -2;
+		leg1.Object.position[1] = -2;
+		leg1.Object.scale[0] = .25;
+		leg1.Object.scale[2] = .25;
+
+		leg2.Object.position[0] = 2;
+		leg2.Object.position[1] = -2;
+		leg2.Object.scale[0] = .25;
+		leg2.Object.scale[2] = .25;
+
+		// Arms
+		arm1.Object.position[1] = -2;
+		//arm1.Object.position[1] = -2;
+		arm1.Object.rotation[2] = 90;
+		arm1.Object.scale[0] = .25;
+		arm1.Object.scale[2] = .25;
+
+		arm2.Object.position[1] = 2;
+		//arm2.Object.position[1] = -2;
+		arm2.Object.rotation[2] = 90;
+		arm2.Object.scale[0] = .25;
+		arm2.Object.scale[2] = .25;
+
+		// Spawn to scene
+		spawnObject(torso, "Robot");
+		spawnObject(head, "Cube");
+		spawnObject(leg1, "Cube");
+		spawnObject(leg2, "Cube");
+		spawnObject(arm1, "Cube");
+		spawnObject(arm2, "Cube");
 	}
 }
