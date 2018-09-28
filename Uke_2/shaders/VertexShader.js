@@ -12,7 +12,7 @@ const vsSource = `
     uniform highp vec3 uAmbientLight;
     uniform highp vec3 uDirectionalLightColor;
 	uniform highp vec3 uDirectionalVector;
-	uniform highp float uTime;
+	uniform highp vec4 uColor;
 
 	varying lowp vec4 vColor;
     varying highp vec3 vLighting;
@@ -23,7 +23,7 @@ const vsSource = `
 
         gl_Position = position;
         gl_PointSize = 2.0;
-        vColor = vec4(aVertexNormal, 1.0);
+        vColor = uColor;
 
         // Apply lighting effect
         highp vec3 directionalVectorNormalized = normalize(uDirectionalVector);

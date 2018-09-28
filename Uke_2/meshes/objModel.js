@@ -8,6 +8,7 @@ function ObjModel(data)
     this.rotation = [ 0, 0, 0 ];
     this.scale = [ 1, 1, 1 ];
 
+    this.color = [ 1, 0.5, 1, 1];
     this.spin = false;
     this.spinIncrement = 1;
 
@@ -78,7 +79,8 @@ function ObjModel(data)
         // Set the shader uniforms
         gl.uniformMatrix4fv(programInfo.uniformLocations.modelViewMatrix, false, this.modelViewMatrix);
         gl.uniformMatrix4fv(programInfo.uniformLocations.normalMatrix, false, normalMatrix);
-        
+        gl.uniform4fv(programInfo.uniformLocations.color, this.color);
+
         gl.drawElements(this.drawType, this.faceCount, gl.UNSIGNED_SHORT, this.offset);
     }
 
