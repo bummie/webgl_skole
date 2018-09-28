@@ -214,8 +214,8 @@ function UIHandler(scene)
     {
         let moveAmount = 0.03;
 		let rotateAmount = 1.5;
-		console.log(this);
-		switch(event.keyCode)
+
+        switch(event.keyCode)
 		{	
 			// W
 			case 87:

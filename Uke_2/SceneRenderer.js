@@ -34,23 +34,14 @@ function SceneRenderer()
 		ui.addListeners();
 
 		this.spawnRobot();
-		requestAnimationFrame(this.render.bind(this));
-	}
-
-	/**
-	 * Receive keyboard input and pass it on
-	 * to the UIHandler
-	 */
-	this.input = function(event)
-	{
-		ui.handleInput(event);
+		requestAnimationFrame(this.update.bind(this));
 	}
 
 	/**
 	 * Renderloop
 	 * @param {*} now 
 	 */
-	this.render = function(now) 
+	this.update = function(now) 
 	{
 		now *= 0.001;  // convert to seconds
 		const deltaTime = now - then;
@@ -60,7 +51,7 @@ function SceneRenderer()
 		ui.updateLightValuesUI();
 		this.draw(gl, programInfo, deltaTime);
 
-		requestAnimationFrame(this.render.bind(this));
+		requestAnimationFrame(this.update.bind(this));
 	}
 
 	/**
@@ -122,7 +113,7 @@ function SceneRenderer()
 		gl.uniform1f(programInfo.uniformLocations.time, new Date().getTime());
 	}
 
-		/**
+	/**
 	 * Spawns a given model
 	 */
 	this.spawnModel = function()
@@ -161,6 +152,15 @@ function SceneRenderer()
 	}
 
 	/**
+	 * Receive keyboard input and pass it on
+	 * to the UIHandler
+	 */
+	this.input = function(event)
+	{
+		ui.handleInput(event);
+	}
+
+	/**
 	 * Spawns robot
 	 */
 	this.spawnRobot = function()
@@ -179,6 +179,7 @@ function SceneRenderer()
 		head.Object.position[1] = 2.5;
 		head.Object.scale[0] = .5;
 		head.Object.scale[1] = .5;
+		head.Object.color = [.8, 0, .2, 1];
 
 		// Legs
 		leg1.Object.position[0] = -2;
