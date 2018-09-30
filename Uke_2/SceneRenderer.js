@@ -28,7 +28,7 @@ function SceneRenderer()
 
 		shaderProgram = shaderHandler.initShaderProgram(gl);
 		programInfo = this.initProgramInfo(gl, shaderProgram);
-		this.nodeRoot = new Node(new NoMesh());
+		this.nodeRoot = new Node(new NoMesh(), null);
 
 		ui = new UIHandler(this);
 		ui.addListeners();
@@ -120,10 +120,10 @@ function SceneRenderer()
 	{	
 		let title = ui.selectSpawn[ui.selectSpawn.selectedIndex].text;
 		let modelPath = './models/' + ui.selectSpawn.value;
-		//alert(modelPath);
-		io.loadFile(modelPath, (obj) =>
-		{
-			spawnObject(new Node(new ObjModel(obj), this.nodeRoot), title);
+
+		io.loadFile(modelPath, (obj, context) =>
+		{	
+			spawnObject(new Node(new ObjModel(obj), context.nodeRoot), title);
 		});
 	}
 
@@ -132,6 +132,7 @@ function SceneRenderer()
 	 */
 	function spawnObject(node, title)
 	{
+		console.log(node.Parent);
 		node.Parent.Children.push(node);
 		if(node.Parent === this.nodeRoot) 
 		{
