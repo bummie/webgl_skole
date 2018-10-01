@@ -8,7 +8,7 @@ function IOHandler(scene)
   {
       fetch(modelPath)
       .then(response => response.text())
-      .then(data => callback(parseObj(data), scene));
+      .then(data => callback(parseObj(data)));
   }
 
   /**

@@ -9,16 +9,17 @@ function SceneRenderer()
 	let then = 0;
 	let shaderProgram;
 	let programInfo;
+	let self = this;
 
-	this.nodeRoot = null;
-	this.camera = new Camera();
-	this.lighting = {
+	self.nodeRoot = null;
+	self.camera = new Camera();
+	self.lighting = {
 		AmbientLight: [0.3, 0.3, 0.3],
 		DirectionalLightColor: [1, 1, 1],
 		DirectionalVector: [0.85, 0.8, 0.75]
 	}
 
-	this.main = function() 
+	self.main = function() 
 	{
 		if (gl === null) 
 		{
@@ -27,21 +28,21 @@ function SceneRenderer()
 		}
 
 		shaderProgram = shaderHandler.initShaderProgram(gl);
-		programInfo = this.initProgramInfo(gl, shaderProgram);
-		this.nodeRoot = new Node(new NoMesh(), null);
+		programInfo = self.initProgramInfo(gl, shaderProgram);
+		self.nodeRoot = new Node(new NoMesh(), null);
 
 		ui = new UIHandler(this);
 		ui.addListeners();
 
-		this.spawnRobot();
-		requestAnimationFrame(this.update.bind(this));
+		self.spawnRobot();
+		requestAnimationFrame(self.update.bind(this));
 	}
 
 	/**
 	 * Renderloop
 	 * @param {*} now 
 	 */
-	this.update = function(now) 
+	self.update = function(now) 
 	{
 		now *= 0.001;  // convert to seconds
 		const deltaTime = now - then;
@@ -49,16 +50,16 @@ function SceneRenderer()
 		
 		ui.updateCameraUI();
 		ui.updateLightValuesUI();
-		this.draw(gl, programInfo, deltaTime);
+		self.draw(gl, programInfo, deltaTime);
 
-		requestAnimationFrame(this.update.bind(this));
+		requestAnimationFrame(self.update.bind(this));
 	}
 
 	/**
 	 * Initiates Program Info
 	 * @param {*} gl 
 	 */
-	this.initProgramInfo = function(gl, shaderProgram) 
+	self.initProgramInfo = function(gl, shaderProgram) 
 	{
 		return {
 			program: shaderProgram,
@@ -85,7 +86,7 @@ function SceneRenderer()
 	 * @param {*} gl 
 	 * @param {*} programInfo 
 	 */
-	this.draw = function(gl, programInfo, deltatime)
+	self.draw = function(gl, programInfo, deltatime)
 	{
 		gl.clearColor(0.0, 0.0, 0.1, 1.0); // Clear to black, fully opaque
 		gl.clearDepth(1.0); // Clear everything
@@ -95,36 +96,36 @@ function SceneRenderer()
 		gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
 		gl.useProgram(programInfo.program);
 
-		this.camera.updateProjectionMatrix(gl);
-		gl.uniformMatrix4fv(programInfo.uniformLocations.projectionMatrix, false, this.camera.projectionMatrix);
-		this.updateLightData();
+		self.camera.updateProjectionMatrix(gl);
+		gl.uniformMatrix4fv(programInfo.uniformLocations.projectionMatrix, false, self.camera.projectionMatrix);
+		self.updateLightData();
 
-		this.nodeRoot.draw(gl, programInfo);
+		self.nodeRoot.draw(gl, programInfo);
 	}
 
 	/**
 	 * Updates the lighting data on the GPU
 	 */
-	this.updateLightData = function()
+	self.updateLightData = function()
 	{
-		gl.uniform3fv(programInfo.uniformLocations.ambientLight, this.lighting.AmbientLight);
-		gl.uniform3fv(programInfo.uniformLocations.directionalLightColor, this.lighting.DirectionalLightColor);
-		gl.uniform3fv(programInfo.uniformLocations.directionalVector, this.lighting.DirectionalVector);
+		gl.uniform3fv(programInfo.uniformLocations.ambientLight, self.lighting.AmbientLight);
+		gl.uniform3fv(programInfo.uniformLocations.directionalLightColor, self.lighting.DirectionalLightColor);
+		gl.uniform3fv(programInfo.uniformLocations.directionalVector, self.lighting.DirectionalVector);
 		gl.uniform1f(programInfo.uniformLocations.time, new Date().getTime());
 	}
-
+	
 	/**
 	 * Spawns a given model
 	 */
-	this.spawnModel = function()
+	self.spawnModel = function()
 	{	
 		let title = ui.selectSpawn[ui.selectSpawn.selectedIndex].text;
 		let modelPath = './models/' + ui.selectSpawn.value;
 
-		io.loadFile(modelPath, (obj, context) =>
-		{	
-			spawnObject(new Node(new ObjModel(obj), context.nodeRoot), title);
-		});
+		io.loadFile(modelPath, (obj => 
+			{
+				spawnObject(new Node(new ObjModel(obj), self.nodeRoot), title);
+			}));
 	}
 
 	/**
@@ -134,7 +135,7 @@ function SceneRenderer()
 	{
 		console.log(node.Parent);
 		node.Parent.Children.push(node);
-		if(node.Parent === this.nodeRoot) 
+		if(node.Parent.Parent == null) 
 		{
 			ui.addOption(title);
 			ui.updateObjectToUI();
@@ -145,9 +146,9 @@ function SceneRenderer()
 	 * Loads data from file
 	 * @param {*} data 
 	 */
-	this.loadModelFromFile = function(data, title)
+	self.loadModelFromFile = function(data, title)
 	{
-		this.nodeRoot.Children.push(new Node(new ObjModel(data), this.nodeRoot));
+		self.nodeRoot.Children.push(new Node(new ObjModel(data), self.nodeRoot));
 		ui.addOption(title);
 		ui.updateObjectToUI();
 	}
@@ -156,7 +157,7 @@ function SceneRenderer()
 	 * Receive keyboard input and pass it on
 	 * to the UIHandler
 	 */
-	this.input = function(event)
+	self.input = function(event)
 	{
 		ui.handleInput(event);
 	}
@@ -164,9 +165,9 @@ function SceneRenderer()
 	/**
 	 * Spawns robot
 	 */
-	this.spawnRobot = function()
+	self.spawnRobot = function()
 	{
-		let torso = new Node(Cube(), this.nodeRoot);
+		let torso = new Node(Cube(), self.nodeRoot);
 		let head = new Node(Cube(), torso);
 		let leg1 = new Node(Cube(), torso);
 		let leg2 = new Node(Cube(), torso);

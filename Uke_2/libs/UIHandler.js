@@ -1,63 +1,65 @@
 function UIHandler(scene)
 {
+	let self = this;
+
     // Object
-    this.selectSpawn = document.getElementById("selectSpawn");
-    this.selectObject = document.getElementById("selectObject");
-    this.selectDrawType = document.getElementById("selectDrawType");
+    self.selectSpawn = document.getElementById("selectSpawn");
+    self.selectObject = document.getElementById("selectObject");
+    self.selectDrawType = document.getElementById("selectDrawType");
 
-    this.btnSpawn = document.getElementById("btnSpawn");
-    this.btnDelete = document.getElementById("btnDelete");
+    self.btnSpawn = document.getElementById("btnSpawn");
+    self.btnDelete = document.getElementById("btnDelete");
 
-    this.position = [
+    self.position = [
         document.getElementById("inPosX"),
         document.getElementById("inPosY"),
         document.getElementById("inPosZ")
     ];
 
-    this.rotation = [
+    self.rotation = [
         document.getElementById("inRotX"),
         document.getElementById("inRotY"),
         document.getElementById("inRotZ")
     ];
 
-    this.shouldRotate = document.getElementById("shouldRotate");
+    self.shouldRotate = document.getElementById("shouldRotate");
 
-    this.scale = [
+    self.scale = [
         document.getElementById("inScaleX"),
         document.getElementById("inScaleY"),
         document.getElementById("inScaleZ")
     ];
 
     // Camera
-    this.camPosition = document.getElementById("camPosition");
-    this.camRotation = document.getElementById("camRotation");
-    this.camScale = document.getElementById("camScale");
+    self.camPosition = document.getElementById("camPosition");
+    self.camRotation = document.getElementById("camRotation");
+    self.camScale = document.getElementById("camScale");
 
-    this.fovValue = document.getElementById("fovValue");
-    this.fovSlider = document.getElementById("fovSlider");
+    self.fovValue = document.getElementById("fovValue");
+    self.fovSlider = document.getElementById("fovSlider");
     
     //Lighting
-    this.ambientLight = [
+    self.ambientLight = [
         document.getElementById("ambientLightX"),
         document.getElementById("ambientLightY"),
         document.getElementById("ambientLightZ")
     ]
 
-    this.directionalLightColor = [
+    self.directionalLightColor = [
         document.getElementById("directionalLightColorX"),
         document.getElementById("directionalLightColorY"),
         document.getElementById("directionalLightColorZ")
     ]
 
-    this.directionalVector = [
+    self.directionalVector = [
         document.getElementById("directionalVectorX"),
         document.getElementById("directionalVectorY"),
         document.getElementById("directionalVectorZ")
     ]
 
-    this.ambientValues = document.getElementById("ambientValues");
-    this.directionalColorValues = document.getElementById("directionalColorValues");
-    this.directionValues = document.getElementById("directionValues");
+    self.ambientValues = document.getElementById("ambientValues");
+    self.directionalColorValues = document.getElementById("directionalColorValues");
+    self.directionValues = document.getElementById("directionValues");
 
 
     // Functions
@@ -66,151 +68,150 @@ function UIHandler(scene)
      * Adds object to the UI dropdown
      * @param {*} title 
      */
-    this.addOption = function(title)
+    self.addOption = function(title)
     {   
         let option = document.createElement("option");
         option.text = title;
-        this.selectObject.add(option);
+        self.selectObject.add(option);
     }
 
 	/**
 	 * Add event listeners
 	 */
-	this.addListeners = function()
+	self.addListeners = function()
 	{
-		this.btnSpawn.addEventListener("click", scene.spawnModel);
-		this.btnDelete.addEventListener("click", this.deleteModel);
-		this.selectDrawType.addEventListener("change", this.updateDrawType);
-		this.selectObject.addEventListener("change", this.updateObjectToUI);
+		self.btnSpawn.addEventListener("click", scene.spawnModel);
+		self.btnDelete.addEventListener("click", self.deleteModel);
+		self.selectDrawType.addEventListener("change", self.updateDrawType);
+		self.selectObject.addEventListener("change", self.updateObjectToUI);
 
-		this.position[0].addEventListener("change", this.updateUIToObject);
-		this.position[1].addEventListener("change", this.updateUIToObject);
-		this.position[2].addEventListener("change", this.updateUIToObject);
+		self.position[0].addEventListener("change", self.updateUIToObject);
+		self.position[1].addEventListener("change", self.updateUIToObject);
+		self.position[2].addEventListener("change", self.updateUIToObject);
 
-		this.rotation[0].addEventListener("change", this.updateUIToObject);
-		this.rotation[1].addEventListener("change", this.updateUIToObject);
-		this.rotation[2].addEventListener("change", this.updateUIToObject);
+		self.rotation[0].addEventListener("change", self.updateUIToObject);
+		self.rotation[1].addEventListener("change", self.updateUIToObject);
+		self.rotation[2].addEventListener("change", self.updateUIToObject);
 
-		this.shouldRotate.addEventListener("change", this.updateUIToObject);
+		self.shouldRotate.addEventListener("change", self.updateUIToObject);
 
-		this.scale[0].addEventListener("change", this.updateUIToObject);
-		this.scale[1].addEventListener("change", this.updateUIToObject);
-		this.scale[2].addEventListener("change", this.updateUIToObject);
+		self.scale[0].addEventListener("change", self.updateUIToObject);
+		self.scale[1].addEventListener("change", self.updateUIToObject);
+		self.scale[2].addEventListener("change", self.updateUIToObject);
 
-		this.fovSlider.addEventListener("change", this.updateUIToObject);
+		self.fovSlider.addEventListener("change", self.updateUIToObject);
 
-		this.ambientLight[0].addEventListener("change", this.updateUIToObject);
-		this.ambientLight[1].addEventListener("change", this.updateUIToObject);
-		this.ambientLight[2].addEventListener("change", this.updateUIToObject);
+		self.ambientLight[0].addEventListener("change", self.updateUIToObject);
+		self.ambientLight[1].addEventListener("change", self.updateUIToObject);
+		self.ambientLight[2].addEventListener("change", self.updateUIToObject);
 
-		this.directionalLightColor[0].addEventListener("change", this.updateUIToObject);
-		this.directionalLightColor[1].addEventListener("change", this.updateUIToObject);
-		this.directionalLightColor[2].addEventListener("change", this.updateUIToObject);
+		self.directionalLightColor[0].addEventListener("change", self.updateUIToObject);
+		self.directionalLightColor[1].addEventListener("change", self.updateUIToObject);
+		self.directionalLightColor[2].addEventListener("change", self.updateUIToObject);
 
-		this.directionalVector[0].addEventListener("change", this.updateUIToObject);
-		this.directionalVector[1].addEventListener("change", this.updateUIToObject);
-		this.directionalVector[2].addEventListener("change", this.updateUIToObject);
+		self.directionalVector[0].addEventListener("change", self.updateUIToObject);
+		self.directionalVector[1].addEventListener("change", self.updateUIToObject);
+		self.directionalVector[2].addEventListener("change", self.updateUIToObject);
 	}	
 
 	/**
 	 * Callback on select drawType
 	 */
-	this.updateDrawType = function()
+	self.updateDrawType = function()
 	{
 		if(scene.nodeRoot.Children.length <= 0) { return; }
 
-		scene.nodeRoot.Children[this.selectObject.selectedIndex].Object.drawType = this.selectDrawType.value;
+		scene.nodeRoot.Children[self.selectObject.selectedIndex].Object.drawType = self.selectDrawType.value;
 	}
 
 	/**
 	 * Updates the UI with data from the camera object
 	 */
-	this.updateCameraUI = function()
+	self.updateCameraUI = function()
 	{
-		this.camPosition.innerHTML = `${scene.camera.position}`;
-		this.camRotation.innerHTML = `${scene.camera.rotation}`;
-		this.camScale.innerHTML = `${scene.camera.scale}`;
+		self.camPosition.innerHTML = `${scene.camera.position}`;
+		self.camRotation.innerHTML = `${scene.camera.rotation}`;
+		self.camScale.innerHTML = `${scene.camera.scale}`;
 		
-		this.fovValue.innerHTML = `${scene.camera.fov}`;
+		self.fovValue.innerHTML = `${scene.camera.fov}`;
 	}
 
 	/**
 	 * Updates the UI with data from the camera object
 	 */
-	this.updateLightValuesUI = function()
+	self.updateLightValuesUI = function()
 	{
-		this.ambientValues.innerHTML = `${scene.lighting.AmbientLight}`;
-		this.directionalColorValues.innerHTML = `${scene.lighting.DirectionalLightColor}`;
-		this.directionValues.innerHTML = `${scene.lighting.DirectionalVector}`;
+		self.ambientValues.innerHTML = `${scene.lighting.AmbientLight}`;
+		self.directionalColorValues.innerHTML = `${scene.lighting.DirectionalLightColor}`;
+		self.directionValues.innerHTML = `${scene.lighting.DirectionalVector}`;
 	}
 
 	/**
 	 * Updates the ui values on selected object change
 	 */
-	this.updateObjectToUI = function()
+	self.updateObjectToUI = function()
 	{
-        console.log(scene);
 		if(scene.nodeRoot.Children.length <= 0) { return; }
 
-		let objectIndex = this.selectObject.selectedIndex;
+		let objectIndex = self.selectObject.selectedIndex;
 
-		this.selectDrawType.value = scene.nodeRoot.Children[objectIndex].Object.drawType;
+		self.selectDrawType.value = scene.nodeRoot.Children[objectIndex].Object.drawType;
 
-		this.position[0].value = scene.nodeRoot.Children[objectIndex].Object.position[0];
-		this.position[1].value = scene.nodeRoot.Children[objectIndex].Object.position[1];
-		this.position[2].value = scene.nodeRoot.Children[objectIndex].Object.position[2];
+		self.position[0].value = scene.nodeRoot.Children[objectIndex].Object.position[0];
+		self.position[1].value = scene.nodeRoot.Children[objectIndex].Object.position[1];
+		self.position[2].value = scene.nodeRoot.Children[objectIndex].Object.position[2];
 		
-		this.rotation[0].value = scene.nodeRoot.Children[objectIndex].Object.rotation[0];
-		this.rotation[1].value = scene.nodeRoot.Children[objectIndex].Object.rotation[1];
-		this.rotation[2].value = scene.nodeRoot.Children[objectIndex].Object.rotation[2];
+		self.rotation[0].value = scene.nodeRoot.Children[objectIndex].Object.rotation[0];
+		self.rotation[1].value = scene.nodeRoot.Children[objectIndex].Object.rotation[1];
+		self.rotation[2].value = scene.nodeRoot.Children[objectIndex].Object.rotation[2];
 		
-	 	this.shouldRotate.checked = scene.nodeRoot.Children[objectIndex].spin;
+	 	self.shouldRotate.checked = scene.nodeRoot.Children[objectIndex].spin;
 
-		this.scale[0].value = scene.nodeRoot.Children[objectIndex].Object.scale[0];
-		this.scale[1].value = scene.nodeRoot.Children[objectIndex].Object.scale[1];
-		this.scale[2].value = scene.nodeRoot.Children[objectIndex].Object.scale[2];
+		self.scale[0].value = scene.nodeRoot.Children[objectIndex].Object.scale[0];
+		self.scale[1].value = scene.nodeRoot.Children[objectIndex].Object.scale[1];
+		self.scale[2].value = scene.nodeRoot.Children[objectIndex].Object.scale[2];
 	}
 
 	/**
 	 * Updates the object with UI values
 	 */
-	this.updateUIToObject = function()
+	self.updateUIToObject = function()
 	{
 		if(scene.nodeRoot.Children.length <= 0) { return; }
 
-		let objectIndex = this.selectObject.selectedIndex;
+		let objectIndex = self.selectObject.selectedIndex;
 
-		scene.nodeRoot.Children[objectIndex].Object.position = [Number(this.position[0].value), Number(this.position[1].value), Number(this.position[2].value)];
-		scene.nodeRoot.Children[objectIndex].Object.rotation = [Number(this.rotation[0].value), Number(this.rotation[1].value), Number(this.rotation[2].value)];
-		scene.nodeRoot.Children[objectIndex].Object.scale = [Number(this.scale[0].value), Number(this.scale[1].value), Number(this.scale[2].value)];
-		scene.nodeRoot.Children[objectIndex].Object.spin = this.shouldRotate.checked;
+		scene.nodeRoot.Children[objectIndex].Object.position = [Number(self.position[0].value), Number(self.position[1].value), Number(self.position[2].value)];
+		scene.nodeRoot.Children[objectIndex].Object.rotation = [Number(self.rotation[0].value), Number(self.rotation[1].value), Number(self.rotation[2].value)];
+		scene.nodeRoot.Children[objectIndex].Object.scale = [Number(self.scale[0].value), Number(self.scale[1].value), Number(self.scale[2].value)];
+		scene.nodeRoot.Children[objectIndex].Object.spin = self.shouldRotate.checked;
 
-		scene.camera.fov = this.fovSlider.value;
+		scene.camera.fov = self.fovSlider.value;
 
-		scene.lighting.AmbientLight = [Number(this.ambientLight[0].value), Number(this.ambientLight[1].value), Number(this.ambientLight[2].value)];
-		scene.lighting.DirectionalLightColor = [Number(this.directionalLightColor[0].value), Number(this.directionalLightColor[1].value), Number(this.directionalLightColor[2].value)];
-		scene.lighting.DirectionalVector = [Number(this.directionalVector[0].value), Number(this.directionalVector[1].value), Number(this.directionalVector[2].value)];
+		scene.lighting.AmbientLight = [Number(self.ambientLight[0].value), Number(self.ambientLight[1].value), Number(self.ambientLight[2].value)];
+		scene.lighting.DirectionalLightColor = [Number(self.directionalLightColor[0].value), Number(self.directionalLightColor[1].value), Number(self.directionalLightColor[2].value)];
+		scene.lighting.DirectionalVector = [Number(self.directionalVector[0].value), Number(self.directionalVector[1].value), Number(self.directionalVector[2].value)];
 	}
 
 	/**
 	 * Deletes the selected model
 	 */
-	this.deleteModel = function()
+	self.deleteModel = function()
 	{
 		if(scene.nodeRoot.Children.length <= 0) { return; }
 
 		console.log("Deleted object");
-		let objectIndex = this.selectObject.selectedIndex;
+		let objectIndex = self.selectObject.selectedIndex;
 
 		scene.nodeRoot.Children.splice(objectIndex, 1);
-		this.selectObject.remove(objectIndex);
+		self.selectObject.remove(objectIndex);
     }
     
     /**
      * Handles keyboard input
      * @param {*} event 
      */
-    this.handleInput = function(event)
+    self.handleInput = function(event)
     {
         let moveAmount = 0.03;
 		let rotateAmount = 1.5;
