@@ -1,4 +1,4 @@
-function Camera()
+function Light()
 {
     this.position = [0, 0, 0];
     this.rotation = [0, 0, 0];
@@ -8,9 +8,13 @@ function Camera()
     this.zNear = 0.1;
     this.zFar = 100.0;
 
+    this.AmbientLight = [0.3, 0.3, 0.3];
+    this.DirectionalVector = [0.85, 0.8, 0.75];
+    this.DirectionalLightColor = [1, 1, 1];
+
     this.projectionMatrix = mat4.create();
     this.rotationDirection = [0, 0, -1];
-    
+
     /**
      * Updates the projection matrix with new translation, rotation, scale values
      */
@@ -30,6 +34,4 @@ function Camera()
 
         mat4.translate(this.projectionMatrix, this.projectionMatrix, this.position);
     }
-
-
 }
