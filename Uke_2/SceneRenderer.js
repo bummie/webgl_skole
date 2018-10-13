@@ -9,11 +9,12 @@ function SceneRenderer()
 	let io = new IOHandler(this);
 	let then = 0;
 	let shaderProgram;
+	let imageShaderProgram;
 	let programInfo;
 
 	self.nodeRoot = null;
 	self.camera = new Camera();
-	self.light = new Light();
+	self.light = new Light(gl);
 
 	self.lighting = {
 		AmbientLight: [0.3, 0.3, 0.3],
@@ -30,6 +31,8 @@ function SceneRenderer()
 		}
 
 		shaderProgram = shaderHandler.initShaderProgram(gl, vertShader, fragShader);
+		imageShaderProgram = shaderHandler.initShaderProgram(gl, vertImageShader, fragImageShader);
+
 		programInfo = self.initProgramInfo(gl, shaderProgram);
 		self.nodeRoot = new Node(new NoMesh(), null);
 
@@ -91,10 +94,7 @@ function SceneRenderer()
 	{
 		// Render to shadow map
 		{
-			self.light.createShadowMap(gl);
-			self.light.updateProjectionMatrix(gl);
-
-			gl.clearColor(0.0, 0.0, 0.1, 1.0); // Clear to black, fully opaque
+			gl.clearColor(0.1, 0.1, 0.1, 1.0); // Clear to black, fully opaque
 			gl.clearDepth(1.0); // Clear everything
 			gl.enable(gl.DEPTH_TEST); // Enable depth testing
 			gl.depthFunc(gl.LEQUAL); // Near things obscure far things
@@ -102,8 +102,12 @@ function SceneRenderer()
 			gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
 			gl.useProgram(programInfo.program);
 			
-			gl.bindFramebuffer(gl.FRAMEBUFFER, self.light.frameBufferObject);
-			gl.bindTexture(gl.TEXTURE_2D, self.light.shadowMap);
+			//gl.bindFramebuffer(gl.FRAMEBUFFER, self.light.frameBufferObject);
+			//gl.bindTexture(gl.TEXTURE_2D, self.light.shadowMap);
+
+			self.light.createShadowMap(gl);
+			self.light.updateProjectionMatrix(gl);
+
 			gl.viewport(0, 0, self.light.textureWidth, self.light.textureHeight);
 			gl.uniformMatrix4fv(programInfo.uniformLocations.projectionMatrix, false, self.light.projectionMatrix);
 
@@ -112,7 +116,7 @@ function SceneRenderer()
 
 		// Render to canvas
 		{
-			gl.clearColor(0.0, 0.0, 0.1, 1.0); // Clear to black, fully opaque
+			gl.clearColor(0.1, 0.1, 0.1, 1.0); // Clear to black, fully opaque
 			gl.clearDepth(1.0); // Clear everything
 			gl.enable(gl.DEPTH_TEST); // Enable depth testing
 			gl.depthFunc(gl.LEQUAL); // Near things obscure far things
@@ -128,6 +132,8 @@ function SceneRenderer()
 
 			self.nodeRoot.draw(gl, programInfo);
 		}
+
+		self.drawImage(gl, self.light.shadowMap, self.light.textureWidth, self.light.textureHeight, 0, 0);
 	}
 
 	/**
@@ -242,4 +248,92 @@ function SceneRenderer()
 		spawnObject(arm1, "Cube");
 		spawnObject(arm2, "Cube");
 	}
+
+
+
+var positionBuffer = gl.createBuffer();
+var texcoordBuffer = gl.createBuffer();
+
+/**
+ * https://webglfundamentals.org/webgl/lessons/webgl-2d-drawimage.html
+ * @param {*} tex 
+ * @param {*} texWidth 
+ * @param {*} texHeight 
+ * @param {*} dstX 
+ * @param {*} dstY 
+ */
+self.drawImage = function(gl, tex, texWidth, texHeight, dstX, dstY)
+{
+	if(tex == null ) { console.log("Texture is null"); return; }
+
+	  // look up where the vertex data needs to go.
+	  var positionLocation = gl.getAttribLocation(imageShaderProgram, "a_position");
+	  var texcoordLocation = gl.getAttribLocation(imageShaderProgram, "a_texcoord");
+	
+	  // lookup uniforms
+	  var matrixLocation = gl.getUniformLocation(imageShaderProgram, "u_matrix");
+	  var textureLocation = gl.getUniformLocation(imageShaderProgram, "u_texture");
+	
+	  // Create a buffer.
+	  gl.bindBuffer(gl.ARRAY_BUFFER, positionBuffer);
+	
+	  // Put a unit quad in the buffer
+	  var positions = [
+		0, 0,
+		0, 1,
+		1, 0,
+		1, 0,
+		0, 1,
+		1, 1,
+	  ]
+	  gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(positions), gl.STATIC_DRAW);
+	
+	  // Create a buffer for texture coords
+	  gl.bindBuffer(gl.ARRAY_BUFFER, texcoordBuffer);
+	
+	  // Put texcoords in the buffer
+	  var texcoords = [
+		0, 0,
+		0, 1,
+		1, 0,
+		1, 0,
+		0, 1,
+		1, 1,
+	  ]
+	  gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(texcoords), gl.STATIC_DRAW);
+
+
+	gl.bindTexture(gl.TEXTURE_2D, tex);
+   
+	// Tell WebGL to use our shader program pair
+	gl.useProgram(imageShaderProgram);
+   
+	// Setup the attributes to pull data from our buffers
+	gl.bindBuffer(gl.ARRAY_BUFFER, positionBuffer);
+	gl.enableVertexAttribArray(positionLocation);
+	gl.vertexAttribPointer(positionLocation, 2, gl.FLOAT, false, 0, 0);
+	gl.bindBuffer(gl.ARRAY_BUFFER, texcoordBuffer);
+	gl.enableVertexAttribArray(texcoordLocation);
+	gl.vertexAttribPointer(texcoordLocation, 2, gl.FLOAT, false, 0, 0);
+   
+	// this matirx will convert from pixels to clip space
+	var matrix = mat4.create(); 
+	mat4.ortho(matrix, 0, gl.canvas.width, gl.canvas.height, 0, -1, 1);
+   
+	// this matrix will translate our quad to dstX, dstY
+	matrix = mat4.translate(matrix, dstX, dstY, 0);
+   
+	// this matrix will scale our 1 unit quad
+	// from 1 unit to texWidth, texHeight units
+	matrix = mat4.scale(matrix, texWidth, texHeight, 1);
+   
+	// Set the matrix.
+	gl.uniformMatrix4fv(matrixLocation, false, matrix);
+   
+	// Tell the shader to get the texture from texture unit 0
+	gl.uniform1i(textureLocation, 0);
+   
+	// draw the quad (2 triangles, 6 vertices)
+	gl.drawArrays(gl.TRIANGLES, 0, 6);
+  }
 }

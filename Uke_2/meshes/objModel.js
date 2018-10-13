@@ -19,6 +19,11 @@ function ObjModel(data)
     this.modelViewMatrix = mat4.create();
     const normalMatrix = mat4.create();
     
+    let positionBuffer = null;
+    let positionNormalBuffer = null;
+	let indexBuffer = null;
+
+
     /**
      * TODO:: Clean up function
      * Draws the mesh to the canvas
@@ -109,15 +114,19 @@ function ObjModel(data)
      */
     this.initBuffer = function(gl)
     {
-        const positionBuffer = gl.createBuffer();
+        if(positionBuffer == null)
+        {
+            positionBuffer = gl.createBuffer();
+            positionNormalBuffer = gl.createBuffer();
+            indexBuffer = gl.createBuffer();
+        }
+
         gl.bindBuffer(gl.ARRAY_BUFFER, positionBuffer);
 		gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(this.vertexList), gl.STATIC_DRAW);
 		
-		const positionNormalBuffer = gl.createBuffer();
         gl.bindBuffer(gl.ARRAY_BUFFER, positionNormalBuffer);
         gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(this.vertexNormalList), gl.STATIC_DRAW);
 
-		const indexBuffer = gl.createBuffer();
 		gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, indexBuffer);
 		gl.bufferData(gl.ELEMENT_ARRAY_BUFFER, new Uint16Array(this.faceList), gl.STATIC_DRAW);
 
