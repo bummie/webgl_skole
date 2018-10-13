@@ -93,47 +93,50 @@ function SceneRenderer()
 	self.draw = function(gl, programInfo, deltatime)
 	{
 		// Render to shadow map
-		{
+		{			
+			self.light.createShadowMap(gl);
+			gl.bindFramebuffer(gl.FRAMEBUFFER, self.light.frameBufferObject);
+
 			gl.clearColor(0.1, 0.1, 0.1, 1.0); // Clear to black, fully opaque
 			gl.clearDepth(1.0); // Clear everything
 			gl.enable(gl.DEPTH_TEST); // Enable depth testing
 			gl.depthFunc(gl.LEQUAL); // Near things obscure far things
-
 			gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
+
 			gl.useProgram(programInfo.program);
 			
-			//gl.bindFramebuffer(gl.FRAMEBUFFER, self.light.frameBufferObject);
-			//gl.bindTexture(gl.TEXTURE_2D, self.light.shadowMap);
-
-			self.light.createShadowMap(gl);
 			self.light.updateProjectionMatrix(gl);
+			//console.log(self.light);
 
 			gl.viewport(0, 0, self.light.textureWidth, self.light.textureHeight);
-			gl.uniformMatrix4fv(programInfo.uniformLocations.projectionMatrix, false, self.light.projectionMatrix);
-
+			gl.uniformMatrix4fv(programInfo.uniformLocations.projectionMatrix, false, self.camera.projectionMatrix);
+		
 			self.nodeRoot.draw(gl, programInfo);
 		}
+		
+		self.updateDebugCanvas(gl, self.light.textureWidth, self.light.textureHeight);
+		//self.drawImage(gl, self.light.shadowMap, self.light.textureWidth, self.light.textureHeight, 0, 0);
 
 		// Render to canvas
 		{
+			gl.bindFramebuffer(gl.FRAMEBUFFER, null);
+
 			gl.clearColor(0.1, 0.1, 0.1, 1.0); // Clear to black, fully opaque
 			gl.clearDepth(1.0); // Clear everything
 			gl.enable(gl.DEPTH_TEST); // Enable depth testing
 			gl.depthFunc(gl.LEQUAL); // Near things obscure far things
-
 			gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
-			gl.bindFramebuffer(gl.FRAMEBUFFER, null);
+			
 			gl.useProgram(programInfo.program);
 			gl.viewport(0, 0, gl.canvas.width, gl.canvas.height);
 
 			self.camera.updateProjectionMatrix(gl);
 			gl.uniformMatrix4fv(programInfo.uniformLocations.projectionMatrix, false, self.camera.projectionMatrix);
 			self.updateLightData();
-
+			
 			self.nodeRoot.draw(gl, programInfo);
 		}
 
-		self.drawImage(gl, self.light.shadowMap, self.light.textureWidth, self.light.textureHeight, 0, 0);
 	}
 
 	/**
@@ -250,6 +253,23 @@ function SceneRenderer()
 	}
 
 
+self.updateDebugCanvas = function(gl, width, height)
+{
+    // Read the contents of the framebuffer
+    var data = new Uint8Array(width * height * 4);
+    gl.readPixels(0, 0, width, height, gl.RGBA, gl.UNSIGNED_BYTE, data);
+
+    // Create a 2D canvas to store the result 
+    var canvas = document.getElementById('debugCanvas');
+   
+    var context = canvas.getContext('2d');
+
+    // Copy the pixels to a 2D canvas
+    var imageData = context.createImageData(width, height);
+    imageData.data.set(data);
+    context.putImageData(imageData, 0, 0);
+}
+
 
 var positionBuffer = gl.createBuffer();
 var texcoordBuffer = gl.createBuffer();
@@ -265,6 +285,8 @@ var texcoordBuffer = gl.createBuffer();
 self.drawImage = function(gl, tex, texWidth, texHeight, dstX, dstY)
 {
 	if(tex == null ) { console.log("Texture is null"); return; }
+
+	gl.bindFramebuffer(gl.FRAMEBUFFER, null);
 
 	  // look up where the vertex data needs to go.
 	  var positionLocation = gl.getAttribLocation(imageShaderProgram, "a_position");
@@ -318,8 +340,8 @@ self.drawImage = function(gl, tex, texWidth, texHeight, dstX, dstY)
    
 	// this matirx will convert from pixels to clip space
 	var matrix = mat4.create(); 
-	mat4.ortho(matrix, 0, gl.canvas.width, gl.canvas.height, 0, -1, 1);
-   
+    mat4.ortho(matrix, -1.0, 1.0, -1.0, 1.0, 0.1, 100);
+
 	// this matrix will translate our quad to dstX, dstY
 	matrix = mat4.translate(matrix, dstX, dstY, 0);
    

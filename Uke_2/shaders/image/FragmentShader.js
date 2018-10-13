@@ -8,6 +8,6 @@ const fragImageShader = `
 
     void main() 
     {
-        gl_FragColor = vec4(1, 1, 1, 1); //texture2D(u_texture, v_texcoord);
+        gl_FragColor = texture2D(u_texture, v_texcoord);
     }
 `;
