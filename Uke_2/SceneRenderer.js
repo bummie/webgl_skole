@@ -252,110 +252,34 @@ function SceneRenderer()
 		spawnObject(arm2, "Cube");
 	}
 
+	/**
+	 * Updates the debugCanvas with framebuffer texture
+	 * https://stackoverflow.com/a/18804083/6826158
+	 * @param {*} gl 
+	 * @param {*} width 
+	 * @param {*} height 
+	 */
+	self.updateDebugCanvas = function(gl, width, height)
+	{
+		// Read the contents of the framebuffer
+		var data = new Uint8Array(width * height * 4);
+		gl.readPixels(0, 0, width, height, gl.RGBA, gl.UNSIGNED_BYTE, data);
 
-self.updateDebugCanvas = function(gl, width, height)
-{
-    // Read the contents of the framebuffer
-    var data = new Uint8Array(width * height * 4);
-    gl.readPixels(0, 0, width, height, gl.RGBA, gl.UNSIGNED_BYTE, data);
+		// Create a 2D canvas to store the result 
+		var canvas = document.getElementById('debugCanvas');
 
-    // Create a 2D canvas to store the result 
-    var canvas = document.getElementById('debugCanvas');
-   
-    var context = canvas.getContext('2d');
+		var context = canvas.getContext('2d');
 
-    // Copy the pixels to a 2D canvas
-    var imageData = context.createImageData(width, height);
-    imageData.data.set(data);
-    context.putImageData(imageData, 0, 0);
-}
+		// Copy the pixels to a 2D canvas
+		var imageData = context.createImageData(width, height);
 
+		// Flip image
+		Array.from({length: height}, (val, i) => data.slice(i * width * 4, (i + 1) * width * 4))
+		.forEach((val, i) => data.set(val, (height - i - 1) * width * 4));
+		imageData.data.set(data);
 
-var positionBuffer = gl.createBuffer();
-var texcoordBuffer = gl.createBuffer();
+		context.putImageData(imageData, 0, 0);
+		context.scale(1, -1);
+	}
 
-/**
- * https://webglfundamentals.org/webgl/lessons/webgl-2d-drawimage.html
- * @param {*} tex 
- * @param {*} texWidth 
- * @param {*} texHeight 
- * @param {*} dstX 
- * @param {*} dstY 
- */
-self.drawImage = function(gl, tex, texWidth, texHeight, dstX, dstY)
-{
-	if(tex == null ) { console.log("Texture is null"); return; }
-
-	gl.bindFramebuffer(gl.FRAMEBUFFER, null);
-
-	  // look up where the vertex data needs to go.
-	  var positionLocation = gl.getAttribLocation(imageShaderProgram, "a_position");
-	  var texcoordLocation = gl.getAttribLocation(imageShaderProgram, "a_texcoord");
-	
-	  // lookup uniforms
-	  var matrixLocation = gl.getUniformLocation(imageShaderProgram, "u_matrix");
-	  var textureLocation = gl.getUniformLocation(imageShaderProgram, "u_texture");
-	
-	  // Create a buffer.
-	  gl.bindBuffer(gl.ARRAY_BUFFER, positionBuffer);
-	
-	  // Put a unit quad in the buffer
-	  var positions = [
-		0, 0,
-		0, 1,
-		1, 0,
-		1, 0,
-		0, 1,
-		1, 1,
-	  ]
-	  gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(positions), gl.STATIC_DRAW);
-	
-	  // Create a buffer for texture coords
-	  gl.bindBuffer(gl.ARRAY_BUFFER, texcoordBuffer);
-	
-	  // Put texcoords in the buffer
-	  var texcoords = [
-		0, 0,
-		0, 1,
-		1, 0,
-		1, 0,
-		0, 1,
-		1, 1,
-	  ]
-	  gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(texcoords), gl.STATIC_DRAW);
-
-
-	gl.bindTexture(gl.TEXTURE_2D, tex);
-   
-	// Tell WebGL to use our shader program pair
-	gl.useProgram(imageShaderProgram);
-   
-	// Setup the attributes to pull data from our buffers
-	gl.bindBuffer(gl.ARRAY_BUFFER, positionBuffer);
-	gl.enableVertexAttribArray(positionLocation);
-	gl.vertexAttribPointer(positionLocation, 2, gl.FLOAT, false, 0, 0);
-	gl.bindBuffer(gl.ARRAY_BUFFER, texcoordBuffer);
-	gl.enableVertexAttribArray(texcoordLocation);
-	gl.vertexAttribPointer(texcoordLocation, 2, gl.FLOAT, false, 0, 0);
-   
-	// this matirx will convert from pixels to clip space
-	var matrix = mat4.create(); 
-    mat4.ortho(matrix, -1.0, 1.0, -1.0, 1.0, 0.1, 100);
-
-	// this matrix will translate our quad to dstX, dstY
-	matrix = mat4.translate(matrix, dstX, dstY, 0);
-   
-	// this matrix will scale our 1 unit quad
-	// from 1 unit to texWidth, texHeight units
-	matrix = mat4.scale(matrix, texWidth, texHeight, 1);
-   
-	// Set the matrix.
-	gl.uniformMatrix4fv(matrixLocation, false, matrix);
-   
-	// Tell the shader to get the texture from texture unit 0
-	gl.uniform1i(textureLocation, 0);
-   
-	// draw the quad (2 triangles, 6 vertices)
-	gl.drawArrays(gl.TRIANGLES, 0, 6);
-  }
 }
