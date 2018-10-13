@@ -38,7 +38,7 @@ function UIHandler(scene)
     self.fovValue = document.getElementById("fovValue");
     self.fovSlider = document.getElementById("fovSlider");
     
-    //Lighting
+    //light
     self.ambientLight = [
         document.getElementById("ambientLightX"),
         document.getElementById("ambientLightY"),
@@ -141,9 +141,9 @@ function UIHandler(scene)
 	 */
 	self.updateLightValuesUI = function()
 	{
-		self.ambientValues.innerHTML = `${scene.lighting.AmbientLight}`;
-		self.directionalColorValues.innerHTML = `${scene.lighting.DirectionalLightColor}`;
-		self.directionValues.innerHTML = `${scene.lighting.DirectionalVector}`;
+		self.ambientValues.innerHTML = `${scene.light.ambientLight}`;
+		self.directionalColorValues.innerHTML = `${scene.light.directionalLightColor}`;
+		self.directionValues.innerHTML = `${scene.light.directionalVector}`;
 	}
 
 	/**
@@ -188,9 +188,9 @@ function UIHandler(scene)
 
 		scene.camera.fov = self.fovSlider.value;
 
-		scene.lighting.AmbientLight = [Number(self.ambientLight[0].value), Number(self.ambientLight[1].value), Number(self.ambientLight[2].value)];
-		scene.lighting.DirectionalLightColor = [Number(self.directionalLightColor[0].value), Number(self.directionalLightColor[1].value), Number(self.directionalLightColor[2].value)];
-		scene.lighting.DirectionalVector = [Number(self.directionalVector[0].value), Number(self.directionalVector[1].value), Number(self.directionalVector[2].value)];
+		scene.light.ambientLight = [Number(self.ambientLight[0].value), Number(self.ambientLight[1].value), Number(self.ambientLight[2].value)];
+		scene.light.directionalLightColor = [Number(self.directionalLightColor[0].value), Number(self.directionalLightColor[1].value), Number(self.directionalLightColor[2].value)];
+		scene.light.directionalVector = [Number(self.directionalVector[0].value), Number(self.directionalVector[1].value), Number(self.directionalVector[2].value)];
 	}
 
 	/**

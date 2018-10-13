@@ -61,5 +61,12 @@ function Light(gl)
         self.frameBufferObject = gl.createFramebuffer();
         gl.bindFramebuffer(gl.FRAMEBUFFER, self.frameBufferObject);
         gl.framebufferTexture2D(gl.FRAMEBUFFER,  gl.COLOR_ATTACHMENT0, gl.TEXTURE_2D, self.shadowMap, 0);
+
+      /*  // create a depth renderbuffer
+        const depthBuffer = gl.createRenderbuffer();
+        gl.bindRenderbuffer(gl.RENDERBUFFER, depthBuffer);
+        // make a depth buffer and the same size as the targetTexture
+        gl.renderbufferStorage(gl.RENDERBUFFER, gl.DEPTH_COMPONENT16, self.textureWidth, self.textureHeight);
+        gl.framebufferRenderbuffer(gl.FRAMEBUFFER, gl.DEPTH_ATTACHMENT, gl.RENDERBUFFER, depthBuffer);*/
     }
 }
