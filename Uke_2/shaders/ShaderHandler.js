@@ -6,7 +6,7 @@ function ShaderHandler()
      * @param {*} vsSource 
      * @param {*} fsSource 
      */
-    this.initShaderProgram = function(gl) 
+    this.initShaderProgram = function(gl, vsSource, fsSource) 
     {
         const vertexShader = this.loadShader(gl, gl.VERTEX_SHADER, vsSource);
         const fragmentShader = this.loadShader(gl, gl.FRAGMENT_SHADER, fsSource);

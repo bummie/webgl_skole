@@ -1,5 +1,5 @@
 // Fragment Shader Program
-const fsSource = `
+const fragShader = `
     varying lowp vec4 vColor;
     varying highp vec3 vLighting;
 

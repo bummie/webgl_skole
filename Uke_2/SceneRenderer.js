@@ -10,7 +10,6 @@ function SceneRenderer()
 	let then = 0;
 	let shaderProgram;
 	let programInfo;
-	let self = this;
 
 	self.nodeRoot = null;
 	self.camera = new Camera();
@@ -30,7 +29,7 @@ function SceneRenderer()
 			return;
 		}
 
-		shaderProgram = shaderHandler.initShaderProgram(gl);
+		shaderProgram = shaderHandler.initShaderProgram(gl, vertShader, fragShader);
 		programInfo = self.initProgramInfo(gl, shaderProgram);
 		self.nodeRoot = new Node(new NoMesh(), null);
 
@@ -90,19 +89,45 @@ function SceneRenderer()
 	 */
 	self.draw = function(gl, programInfo, deltatime)
 	{
-		gl.clearColor(0.0, 0.0, 0.1, 1.0); // Clear to black, fully opaque
-		gl.clearDepth(1.0); // Clear everything
-		gl.enable(gl.DEPTH_TEST); // Enable depth testing
-		gl.depthFunc(gl.LEQUAL); // Near things obscure far things
+		// Render to shadow map
+		{
+			self.light.createShadowMap(gl);
+			self.light.updateProjectionMatrix(gl);
 
-		gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
-		gl.useProgram(programInfo.program);
+			gl.clearColor(0.0, 0.0, 0.1, 1.0); // Clear to black, fully opaque
+			gl.clearDepth(1.0); // Clear everything
+			gl.enable(gl.DEPTH_TEST); // Enable depth testing
+			gl.depthFunc(gl.LEQUAL); // Near things obscure far things
 
-		self.camera.updateProjectionMatrix(gl);
-		gl.uniformMatrix4fv(programInfo.uniformLocations.projectionMatrix, false, self.camera.projectionMatrix);
-		self.updateLightData();
+			gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
+			gl.useProgram(programInfo.program);
+			
+			gl.bindFramebuffer(gl.FRAMEBUFFER, self.light.frameBufferObject);
+			gl.bindTexture(gl.TEXTURE_2D, self.light.shadowMap);
+			gl.viewport(0, 0, self.light.textureWidth, self.light.textureHeight);
+			gl.uniformMatrix4fv(programInfo.uniformLocations.projectionMatrix, false, self.light.projectionMatrix);
 
-		self.nodeRoot.draw(gl, programInfo);
+			self.nodeRoot.draw(gl, programInfo);
+		}
+
+		// Render to canvas
+		{
+			gl.clearColor(0.0, 0.0, 0.1, 1.0); // Clear to black, fully opaque
+			gl.clearDepth(1.0); // Clear everything
+			gl.enable(gl.DEPTH_TEST); // Enable depth testing
+			gl.depthFunc(gl.LEQUAL); // Near things obscure far things
+
+			gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
+			gl.bindFramebuffer(gl.FRAMEBUFFER, null);
+			gl.useProgram(programInfo.program);
+			gl.viewport(0, 0, gl.canvas.width, gl.canvas.height);
+
+			self.camera.updateProjectionMatrix(gl);
+			gl.uniformMatrix4fv(programInfo.uniformLocations.projectionMatrix, false, self.camera.projectionMatrix);
+			self.updateLightData();
+
+			self.nodeRoot.draw(gl, programInfo);
+		}
 	}
 
 	/**
@@ -110,9 +135,9 @@ function SceneRenderer()
 	 */
 	self.updateLightData = function()
 	{
-		gl.uniform3fv(programInfo.uniformLocations.ambientLight, self.light.AmbientLight);
-		gl.uniform3fv(programInfo.uniformLocations.directionalLightColor, self.light.DirectionalLightColor);
-		gl.uniform3fv(programInfo.uniformLocations.directionalVector, self.light.DirectionalVector);
+		gl.uniform3fv(programInfo.uniformLocations.ambientLight, self.light.ambientLight);
+		gl.uniform3fv(programInfo.uniformLocations.directionalLightColor, self.light.directionalLightColor);
+		gl.uniform3fv(programInfo.uniformLocations.directionalVector, self.light.directionalVector);
 		gl.uniform1f(programInfo.uniformLocations.time, new Date().getTime());
 	}
 	

@@ -1,6 +1,6 @@
 // Vertex shader program
 
-const vsSource = `
+const vertShader = `
 	attribute vec4 aVertexPosition;
 	attribute vec3 aVertexNormal;
     attribute vec4 aVertexColor;
