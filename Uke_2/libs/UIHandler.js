@@ -151,7 +151,6 @@ function UIHandler(scene)
 	 */
 	self.updateObjectToUI = function()
 	{
-        console.log(scene);
 		if(scene.nodeRoot.Children.length <= 0) { return; }
 
 		let objectIndex = self.selectObject.selectedIndex;

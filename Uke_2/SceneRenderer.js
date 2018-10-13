@@ -10,6 +10,7 @@ function SceneRenderer()
 	let then = 0;
 	let shaderProgram;
 	let programInfo;
+	let self = this;
 
 	self.nodeRoot = null;
 	self.camera = new Camera();
@@ -31,7 +32,7 @@ function SceneRenderer()
 
 		shaderProgram = shaderHandler.initShaderProgram(gl);
 		programInfo = self.initProgramInfo(gl, shaderProgram);
-		self.nodeRoot = new Node(new NoMesh());
+		self.nodeRoot = new Node(new NoMesh(), null);
 
 		ui = new UIHandler(this);
 		ui.addListeners();
@@ -114,7 +115,7 @@ function SceneRenderer()
 		gl.uniform3fv(programInfo.uniformLocations.directionalVector, self.light.DirectionalVector);
 		gl.uniform1f(programInfo.uniformLocations.time, new Date().getTime());
 	}
-
+	
 	/**
 	 * Spawns a given model
 	 */
@@ -134,6 +135,7 @@ function SceneRenderer()
 	 */
 	function spawnObject(node, title)
 	{
+		console.log(node.Parent);
 		node.Parent.Children.push(node);
 		if(node.Parent === self.nodeRoot) 
 		{
