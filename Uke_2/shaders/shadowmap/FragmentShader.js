@@ -1,10 +1,10 @@
 // Fragment Shader Program
+
 const fragShadowShader = `
-    varying lowp vec4 vColor;
-    varying highp vec3 vLighting;
 
 	void main() 
 	{
-        gl_FragColor = vColor * vec4(vLighting, 1.0);
+		// gl_FragDepth = gl_FragCoord.z;
+		gl_FragColor = vec4(gl_FragCoord.z, gl_FragCoord.z, gl_FragCoord.z, 1);
     }
 `;

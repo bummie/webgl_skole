@@ -2,6 +2,8 @@ function SceneRenderer()
 {
 	const canvas = document.querySelector("#glCanvas");
 	const gl = canvas.getContext("webgl");
+	const depthExt = gl.getExtension("WEBGL_depth_texture");
+
 	let self = this;
 
 	let ui;
@@ -9,7 +11,8 @@ function SceneRenderer()
 	let io = new IOHandler(this);
 	let then = 0;
 	let shaderProgram;
-	let imageShaderProgram;
+	let shadowShaderProgram;
+	let shadowProgramInfo;
 	let programInfo;
 
 	self.nodeRoot = null;
@@ -31,9 +34,10 @@ function SceneRenderer()
 		}
 
 		shaderProgram = shaderHandler.initShaderProgram(gl, vertShader, fragShader);
-		imageShaderProgram = shaderHandler.initShaderProgram(gl, vertImageShader, fragImageShader);
+		shadowShaderProgram = shaderHandler.initShaderProgram(gl, vertShadowShader, fragShadowShader);
 
 		programInfo = self.initProgramInfo(gl, shaderProgram);
+		shadowProgramInfo = self.initProgramInfo(gl, shadowShaderProgram);
 		self.nodeRoot = new Node(new NoMesh(), null);
 
 		ui = new UIHandler(this);
@@ -103,21 +107,18 @@ function SceneRenderer()
 			gl.depthFunc(gl.LEQUAL); // Near things obscure far things
 			gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
 
-			gl.useProgram(programInfo.program);
-			
+			gl.useProgram(shadowProgramInfo.program);
 			self.light.updateProjectionMatrix(gl);
-			//console.log(self.light);
 			gl.viewport(0, 0, self.light.textureWidth, self.light.textureHeight);
 
 			self.camera.updateProjectionMatrix(gl);
-			gl.uniformMatrix4fv(programInfo.uniformLocations.projectionMatrix, false, self.camera.projectionMatrix);
+			gl.uniformMatrix4fv(shadowProgramInfo.uniformLocations.projectionMatrix, false, self.camera.projectionMatrix);
 			self.updateLightData();		
 			
-			self.nodeRoot.draw(gl, programInfo);
+			self.nodeRoot.draw(gl, shadowProgramInfo);
 		}
 		
 		self.updateDebugCanvas(gl, self.light.textureWidth, self.light.textureHeight);
-		//self.drawImage(gl, self.light.shadowMap, self.light.textureWidth, self.light.textureHeight, 0, 0);
 
 		// Render to canvas
 		{

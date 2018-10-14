@@ -53,6 +53,7 @@ function Light(gl)
         gl.bindTexture(gl.TEXTURE_2D, self.shadowMap);
  
         gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA,  self.textureWidth, self.textureHeight, 0, gl.RGBA, gl.UNSIGNED_BYTE, null);
+		//gl.texImage2D(gl.TEXTURE_2D, 0, gl.DEPTH_COMPONENT,  self.textureWidth, self.textureHeight, 0, gl.DEPTH_COMPONENT, gl.UNSIGNED_SHORT, null);
 
         gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR);
         gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE);
@@ -60,13 +61,7 @@ function Light(gl)
 
         self.frameBufferObject = gl.createFramebuffer();
         gl.bindFramebuffer(gl.FRAMEBUFFER, self.frameBufferObject);
-        gl.framebufferTexture2D(gl.FRAMEBUFFER,  gl.COLOR_ATTACHMENT0, gl.TEXTURE_2D, self.shadowMap, 0);
-
-      /*  // create a depth renderbuffer
-        const depthBuffer = gl.createRenderbuffer();
-        gl.bindRenderbuffer(gl.RENDERBUFFER, depthBuffer);
-        // make a depth buffer and the same size as the targetTexture
-        gl.renderbufferStorage(gl.RENDERBUFFER, gl.DEPTH_COMPONENT16, self.textureWidth, self.textureHeight);
-        gl.framebufferRenderbuffer(gl.FRAMEBUFFER, gl.DEPTH_ATTACHMENT, gl.RENDERBUFFER, depthBuffer);*/
+		//gl.framebufferTexture2D(gl.FRAMEBUFFER, gl.DEPTH_ATTACHMENT, gl.TEXTURE_2D, self.shadowMap, 0);
+		gl.framebufferTexture2D(gl.FRAMEBUFFER, gl.COLOR_ATTACHMENT0, gl.TEXTURE_2D, self.shadowMap, 0);
     }
 }
