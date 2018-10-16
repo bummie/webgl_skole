@@ -10,9 +10,13 @@ function SceneRenderer()
 	let shaderHandler = new ShaderHandler();
 	let io = new IOHandler(this);
 	let then = 0;
+
 	let shaderProgram;
 	let shadowShaderProgram;
+	let debugShaderProgram;
+
 	let shadowProgramInfo;
+	let debugProgramInfo;
 	let programInfo;
 
 	self.nodeRoot = null;
@@ -35,9 +39,12 @@ function SceneRenderer()
 
 		shaderProgram = shaderHandler.initShaderProgram(gl, vertShader, fragShader);
 		shadowShaderProgram = shaderHandler.initShaderProgram(gl, vertShadowShader, fragShadowShader);
+		debugShaderProgram = shaderHandler.initShaderProgram(gl, vertImageShader, fragImageShader);
 
 		programInfo = self.initProgramInfo(gl, shaderProgram);
 		shadowProgramInfo = self.initProgramInfo(gl, shadowShaderProgram);
+		debugProgramInfo = self.initProgramInfo(gl, debugShaderProgram);
+
 		self.nodeRoot = new Node(new NoMesh(), null);
 
 		ui = new UIHandler(this);
@@ -118,7 +125,7 @@ function SceneRenderer()
 			self.nodeRoot.draw(gl, shadowProgramInfo);
 		}
 		
-		self.updateDebugCanvas(gl, self.light.textureWidth, self.light.textureHeight);
+		//self.updateDebugCanvas(gl, self.light.textureWidth, self.light.textureHeight);
 
 		// Render to canvas
 		{
@@ -253,6 +260,14 @@ function SceneRenderer()
 		spawnObject(leg2, "Cube");
 		spawnObject(arm1, "Cube");
 		spawnObject(arm2, "Cube");
+	}
+
+	/**
+	 * Draws texture to debug mesh
+	 */
+	self.drawDebugTexture(gl, texture)
+	{
+		
 	}
 
 	/**
