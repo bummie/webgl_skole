@@ -34,5 +34,7 @@ const vertShader = `
   
         highp float directional = max(dot(transformedNormal.xyz, directionalVectorNormalized), 0.0);
         vLighting = uAmbientLight + (uDirectionalLightColor * directional);
+
+        vTextureCoord = aTextureCoord;
     }
   `;

@@ -61,7 +61,8 @@ function IOHandler(scene)
     return {
       vertexList: vList,
       vertexNormalList: vnList,
-      faceList: fList
+      faceList: fList,
+      textureCoords: null
     }
   }
 

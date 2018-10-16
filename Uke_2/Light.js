@@ -61,7 +61,8 @@ function Light(gl)
 
         self.frameBufferObject = gl.createFramebuffer();
         gl.bindFramebuffer(gl.FRAMEBUFFER, self.frameBufferObject);
-		//gl.framebufferTexture2D(gl.FRAMEBUFFER, gl.DEPTH_ATTACHMENT, gl.TEXTURE_2D, self.shadowMap, 0);
+        
+        //gl.framebufferTexture2D(gl.FRAMEBUFFER, gl.DEPTH_ATTACHMENT, gl.TEXTURE_2D, self.shadowMap, 0);
 		gl.framebufferTexture2D(gl.FRAMEBUFFER, gl.COLOR_ATTACHMENT0, gl.TEXTURE_2D, self.shadowMap, 0);
     }
 }

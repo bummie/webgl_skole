@@ -88,7 +88,8 @@ function Cube()
   let data = {
     vertexList: vList,
     vertexNormalList: vnList,
-    faceList: fList
+	faceList: fList,
+	textureCoords: null
   }
 
   return new ObjModel(data);

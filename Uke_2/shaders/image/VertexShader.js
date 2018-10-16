@@ -1,16 +1,22 @@
 // Vertex shader program
 
 const vertImageShader = `
-    attribute vec4 a_position;
-    attribute vec2 a_texcoord;
+	attribute vec4 aVertexPosition;
+	attribute vec3 aVertexNormal;
+    attribute vec4 aVertexColor;
+	attribute vec2 aTextureCoord;
+	
+    uniform mat4 uModelViewMatrix;
+    uniform mat4 uProjectionMatrix;
+	uniform mat4 uNormalMatrix;
+
+	varying highp vec2 vTextureCoord;
     
-    uniform mat4 u_matrix;
-    
-    varying vec2 v_texcoord;
-    
-    void main() 
+    void main(void) 
     {
-        gl_Position = u_matrix * a_position;
-        v_texcoord = a_texcoord;
+        gl_Position = uProjectionMatrix * uModelViewMatrix * aVertexPosition;;
+        gl_PointSize = 2.0;
+
+        vTextureCoord = aTextureCoord;
     }
   `;

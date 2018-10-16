@@ -8,13 +8,12 @@ function Quad()
 		-1.0,  1.0,  1.0
 	  ];
 
-      fList = [
+  fList = [
 		0,  1,  2, 
 		0,  2,  3    
 	  ];
 	
 	vnList = [
-
 	// Front
      0.0,  0.0,  1.0,
      0.0,  0.0,  1.0,
@@ -22,10 +21,18 @@ function Quad()
      0.0,  0.0,  1.0,
   ];
 
+  tCoords = [
+    0.0,  0.0,
+    1.0,  0.0,
+    1.0,  1.0,
+    0.0,  1.0
+  ];
+
   let data = {
     vertexList: vList,
     vertexNormalList: vnList,
-    faceList: fList
+    faceList: fList,
+    textureCoords: tCoords
   }
 
   return new ObjModel(data);

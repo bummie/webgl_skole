@@ -1,13 +1,12 @@
 // Fragment Shader Program
+
 const fragImageShader = `
-    precision mediump float;
+    uniform sampler2D uTexture;
 
-    varying vec2 v_texcoord;
-
-    uniform sampler2D u_texture;
+    varying highp vec2 vTextureCoord;
 
     void main() 
     {
-        gl_FragColor = texture2D(u_texture, v_texcoord);
+        gl_FragColor = texture2D(uTexture, vTextureCoord);
     }
 `;

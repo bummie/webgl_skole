@@ -22,12 +22,8 @@ function SceneRenderer()
 	self.nodeRoot = null;
 	self.camera = new Camera();
 	self.light = new Light(gl);
-
-	self.lighting = {
-		AmbientLight: [0.3, 0.3, 0.3],
-		DirectionalLightColor: [1, 1, 1],
-		DirectionalVector: [0.85, 0.8, 0.75]
-	}
+	
+	let debugQuad;
 
 	self.main = function() 
 	{
@@ -50,7 +46,10 @@ function SceneRenderer()
 		ui = new UIHandler(this);
 		ui.addListeners();
 
-		self.spawnRobot();
+		//self.spawnRobot();
+
+		debugQuad = Quad();
+
 		requestAnimationFrame(self.update.bind(this));
 	}
 
@@ -82,7 +81,8 @@ function SceneRenderer()
 			attribLocations: {
 				vertexPosition: gl.getAttribLocation(shaderProgram, 'aVertexPosition'),
 				vertexColor: gl.getAttribLocation(shaderProgram, 'aVertexColor'),
-				vertexNormal: gl.getAttribLocation(shaderProgram, 'aVertexNormal')
+				vertexNormal: gl.getAttribLocation(shaderProgram, 'aVertexNormal'),
+				textureCoord: gl.getAttribLocation(shaderProgram, 'aTextureCoord')
 			},
 			uniformLocations: {
 				projectionMatrix: gl.getUniformLocation(shaderProgram, 'uProjectionMatrix'),
@@ -91,7 +91,9 @@ function SceneRenderer()
 				ambientLight: gl.getUniformLocation(shaderProgram, 'uAmbientLight'),
 				directionalLightColor: gl.getUniformLocation(shaderProgram, 'uDirectionalLightColor'),
 				directionalVector: gl.getUniformLocation(shaderProgram, 'uDirectionalVector'),
-				color: gl.getUniformLocation(shaderProgram, 'uColor')
+				color: gl.getUniformLocation(shaderProgram, 'uColor'),
+				texture: gl.getUniformLocation(shaderProgram, 'uTexture')
+
 			}
 		};
 	}
@@ -125,11 +127,13 @@ function SceneRenderer()
 			self.nodeRoot.draw(gl, shadowProgramInfo);
 		}
 		
-		//self.updateDebugCanvas(gl, self.light.textureWidth, self.light.textureHeight);
+		debugQuad.texture = self.light.shadowMap;
+		self.updateDebugCanvas(gl, 256, 256);
 
 		// Render to canvas
 		{
 			gl.bindFramebuffer(gl.FRAMEBUFFER, null);
+			gl.useProgram(programInfo.program);
 
 			gl.clearColor(0.1, 0.1, 0.1, 1.0); // Clear to black, fully opaque
 			gl.clearDepth(1.0); // Clear everything
@@ -137,7 +141,6 @@ function SceneRenderer()
 			gl.depthFunc(gl.LEQUAL); // Near things obscure far things
 			gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
 			
-			gl.useProgram(programInfo.program);
 			gl.viewport(0, 0, gl.canvas.width, gl.canvas.height);
 
 			self.camera.updateProjectionMatrix(gl);
@@ -147,6 +150,7 @@ function SceneRenderer()
 			self.nodeRoot.draw(gl, programInfo);
 		}
 
+		debugQuad.draw(self.nodeRoot, gl, debugProgramInfo);
 	}
 
 	/**
@@ -260,14 +264,6 @@ function SceneRenderer()
 		spawnObject(leg2, "Cube");
 		spawnObject(arm1, "Cube");
 		spawnObject(arm2, "Cube");
-	}
-
-	/**
-	 * Draws texture to debug mesh
-	 */
-	self.drawDebugTexture(gl, texture)
-	{
-		
 	}
 
 	/**
