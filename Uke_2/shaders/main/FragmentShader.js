@@ -2,9 +2,9 @@
 const fragShader = `
     uniform sampler2D uTexture;
 
-    varying lowp vec4 vColor;
-    varying highp vec3 vLighting;
-    varying highp vec2 vTextureCoord;
+	varying lowp vec4 vColor;
+	varying highp vec3 vLighting;
+	varying highp vec2 vTextureCoord;
 
     void main() 
     {

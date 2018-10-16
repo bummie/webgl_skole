@@ -46,9 +46,10 @@ function SceneRenderer()
 		ui = new UIHandler(this);
 		ui.addListeners();
 
-		//self.spawnRobot();
+		self.spawnRobot();
 
 		debugQuad = Quad();
+		debugQuad.position = [0, 0, -10];
 
 		requestAnimationFrame(self.update.bind(this));
 	}
@@ -93,7 +94,6 @@ function SceneRenderer()
 				directionalVector: gl.getUniformLocation(shaderProgram, 'uDirectionalVector'),
 				color: gl.getUniformLocation(shaderProgram, 'uColor'),
 				texture: gl.getUniformLocation(shaderProgram, 'uTexture')
-
 			}
 		};
 	}
@@ -110,30 +110,30 @@ function SceneRenderer()
 			self.light.createShadowMap(gl);
 			gl.bindFramebuffer(gl.FRAMEBUFFER, self.light.frameBufferObject);
 
+			gl.useProgram(shadowProgramInfo.program);
+
 			gl.clearColor(0.1, 0.1, 0.1, 1.0); // Clear to black, fully opaque
 			gl.clearDepth(1.0); // Clear everything
 			gl.enable(gl.DEPTH_TEST); // Enable depth testing
 			gl.depthFunc(gl.LEQUAL); // Near things obscure far things
 			gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
 
-			gl.useProgram(shadowProgramInfo.program);
 			self.light.updateProjectionMatrix(gl);
 			gl.viewport(0, 0, self.light.textureWidth, self.light.textureHeight);
 
 			self.camera.updateProjectionMatrix(gl);
 			gl.uniformMatrix4fv(shadowProgramInfo.uniformLocations.projectionMatrix, false, self.camera.projectionMatrix);
-			self.updateLightData();		
 			
 			self.nodeRoot.draw(gl, shadowProgramInfo);
 		}
 		
-		debugQuad.texture = self.light.shadowMap;
 		self.updateDebugCanvas(gl, 256, 256);
 
 		// Render to canvas
 		{
 			gl.bindFramebuffer(gl.FRAMEBUFFER, null);
 			gl.useProgram(programInfo.program);
+			gl.bindTexture(gl.TEXTURE_2D, self.light.shadowMap);
 
 			gl.clearColor(0.1, 0.1, 0.1, 1.0); // Clear to black, fully opaque
 			gl.clearDepth(1.0); // Clear everything
@@ -161,7 +161,6 @@ function SceneRenderer()
 		gl.uniform3fv(programInfo.uniformLocations.ambientLight, self.light.ambientLight);
 		gl.uniform3fv(programInfo.uniformLocations.directionalLightColor, self.light.directionalLightColor);
 		gl.uniform3fv(programInfo.uniformLocations.directionalVector, self.light.directionalVector);
-		gl.uniform1f(programInfo.uniformLocations.time, new Date().getTime());
 	}
 	
 	/**
@@ -226,6 +225,7 @@ function SceneRenderer()
 
 		// Torso
 		torso.Object.scale[2] = .5;
+		torso.Object.position[2] = -15;
 
 		// Head
 		head.Object.position[1] = 2.5;

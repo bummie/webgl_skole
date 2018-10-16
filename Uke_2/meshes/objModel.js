@@ -27,7 +27,7 @@ function ObjModel(data)
     let positionBuffer = null;
     let positionNormalBuffer = null;
     let indexBuffer = null;
-    let textureCoordsBuffer = null;
+    let textureCoordBuffer = null;
 
     /**
      * TODO:: Clean up function
@@ -53,8 +53,6 @@ function ObjModel(data)
         mat4.invert(normalMatrix, self.modelViewMatrix);
         mat4.transpose(normalMatrix, normalMatrix);
        
-        gl.useProgram(programInfo.program);
-
         buffers = self.initBuffer(gl);
 
 		{
@@ -87,20 +85,15 @@ function ObjModel(data)
 
         if(self.textureCoords != null && self.texture != null)
         {
-            gl.activeTexture(gl.TEXTURE0);
-
-            // Bind the texture to texture unit 0
-            gl.bindTexture(gl.TEXTURE_2D, self.texture);
-
             // Tell the shader we bound the texture to texture unit 0
-            gl.uniform1i(programInfo.uniformLocations.texture, 0);
-
+            gl.uniform1i(programInfo.uniformLocations.texture, gl.TEXTURE0);
+            
 			const num = 2; // every coordinate composed of 2 values
 			const type = gl.FLOAT; // the data in the buffer is 32 bit float
 			const normalize = false; // don't normalize
 			const stride = 0; // how many bytes to get from one set to the next
 			const offset = 0; // how many bytes inside the buffer to start from
-			gl.bindBuffer(gl.ARRAY_BUFFER, buffers.textureCoordBuffer);
+			gl.bindBuffer(gl.ARRAY_BUFFER, buffers.texCoordBuffer);
 			gl.vertexAttribPointer(programInfo.attribLocations.textureCoord, num, type, normalize, stride, offset);
 			gl.enableVertexAttribArray(programInfo.attribLocations.textureCoord);
 		}
@@ -165,7 +158,7 @@ function ObjModel(data)
 			vertexBuffer: positionBuffer,
 			vertexNormalBuffer: positionNormalBuffer,
             faceBuffer: indexBuffer,
-            textureCoordBuffer: textureCoordBuffer
+            texCoordBuffer: textureCoordBuffer
         };
     }
 }
