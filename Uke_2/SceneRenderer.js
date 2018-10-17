@@ -89,6 +89,7 @@ function SceneRenderer()
 				projectionMatrix: gl.getUniformLocation(shaderProgram, 'uProjectionMatrix'),
 				modelViewMatrix: gl.getUniformLocation(shaderProgram, 'uModelViewMatrix'),
 				normalMatrix: gl.getUniformLocation(shaderProgram, 'uNormalMatrix'),
+				shadowMatrix: gl.getUniformLocation(shaderProgram, 'uShadowMatrix'),
 				ambientLight: gl.getUniformLocation(shaderProgram, 'uAmbientLight'),
 				directionalLightColor: gl.getUniformLocation(shaderProgram, 'uDirectionalLightColor'),
 				directionalVector: gl.getUniformLocation(shaderProgram, 'uDirectionalVector'),
@@ -127,7 +128,7 @@ function SceneRenderer()
 			self.nodeRoot.draw(gl, shadowProgramInfo);
 		}
 		
-		self.updateDebugCanvas(gl, 256, 256);
+		//self.updateDebugCanvas(gl, 256, 256);
 
 		// Render to canvas
 		{
@@ -142,10 +143,12 @@ function SceneRenderer()
 			gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
 			
 			gl.viewport(0, 0, gl.canvas.width, gl.canvas.height);
+			self.updateLightData();
 
 			self.camera.updateProjectionMatrix(gl);
 			gl.uniformMatrix4fv(programInfo.uniformLocations.projectionMatrix, false, self.camera.projectionMatrix);
-			self.updateLightData();
+			gl.uniformMatrix4fv(programInfo.uniformLocations.shadowMatrix, false, self.light.projectionMatrix);
+			gl.uniform1i(programInfo.uniformLocations.texture, 0);
 			
 			self.nodeRoot.draw(gl, programInfo);
 		}

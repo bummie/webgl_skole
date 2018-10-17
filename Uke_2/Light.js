@@ -21,6 +21,8 @@ function Light(gl)
     self.shadowMap = null; 
     self.frameBufferObject = null; 
 
+    self.scaleOrtho = 3;
+
     /**
      * Updates the projection matrix with new translation, rotation, scale values
      */
@@ -30,8 +32,9 @@ function Light(gl)
 		const aspect = self.textureWidth / self.textureHeight;
 
         mat4.identity(self.projectionMatrix);
-		mat4.perspective(self.projectionMatrix, fieldOfView, aspect, self.zNear, self.zFar);
-       
+		//mat4.perspective(self.projectionMatrix, fieldOfView, aspect, self.zNear, self.zFar);
+        mat4.ortho(self.projectionMatrix, -self.scaleOrtho, self.scaleOrtho, -self.scaleOrtho, self.scaleOrtho, self.zNear, self.zFar);
+
         /*X*/ mat4.rotate(self.projectionMatrix, self.projectionMatrix, glMatrix.toRadian(self.directionalVector[0]), [1, 0, 0]);
         /*Y*/ mat4.rotate(self.projectionMatrix, self.projectionMatrix, glMatrix.toRadian(self.directionalVector[1]), [0, 1, 0]);
         /*Z*/ mat4.rotate(self.projectionMatrix, self.projectionMatrix, glMatrix.toRadian(self.directionalVector[2]), [0, 0, 1]);

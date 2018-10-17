@@ -10,7 +10,7 @@ const fragImageShader = `
     void main() 
     {
         float n = 1.0;
-        float f = 2000.0;
+        float f = 10.0;
         float z = texture2D(uTexture, vTextureCoord.st).x;
         float grey = (2.0 * n) / (f + n - z*(f-n));
         vec4 color = vec4(grey, grey, grey, 1.0);

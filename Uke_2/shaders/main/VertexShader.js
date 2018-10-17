@@ -8,7 +8,8 @@ const vertShader = `
 	
     uniform mat4 uModelViewMatrix;
     uniform mat4 uProjectionMatrix;
-	uniform mat4 uNormalMatrix;
+    uniform mat4 uNormalMatrix;
+    uniform mat4 uShadowMatrix;
 
     uniform highp vec3 uAmbientLight;
     uniform highp vec3 uDirectionalLightColor;
@@ -17,7 +18,8 @@ const vertShader = `
 
 	varying lowp vec4 vColor;
 	varying highp vec3 vLighting;
-	varying highp vec2 vTextureCoord;
+    varying highp vec2 vTextureCoord;
+    varying highp vec4 vShadowCoord;
     
     void main(void) 
     {
@@ -36,5 +38,6 @@ const vertShader = `
         vLighting = uAmbientLight + (uDirectionalLightColor * directional);
 
         vTextureCoord = aTextureCoord;
+        vShadowCoord = uShadowMatrix * uModelViewMatrix * aVertexPosition;
     }
   `;
