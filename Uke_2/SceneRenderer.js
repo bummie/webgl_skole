@@ -147,10 +147,13 @@ function SceneRenderer()
 			gl.uniformMatrix4fv(programInfo.uniformLocations.projectionMatrix, false, self.camera.projectionMatrix);
 			self.updateLightData();
 			
-			self.nodeRoot.draw(gl, programInfo);
+			//self.nodeRoot.draw(gl, programInfo);
+
+			gl.useProgram(debugProgramInfo.program);
+			gl.uniformMatrix4fv(debugProgramInfo.uniformLocations.projectionMatrix, false, self.camera.projectionMatrix);
+			debugQuad.draw(self.nodeRoot, gl, debugProgramInfo);
 		}
 
-		debugQuad.draw(self.nodeRoot, gl, debugProgramInfo);
 	}
 
 	/**

@@ -55,7 +55,8 @@ function ObjModel(data)
        
         buffers = self.initBuffer(gl);
 
-		{
+        console.log(self);
+		if(self.vertexNormalList != null){
             const numComponents = 3; // pull out 3 values per iteration
             const type = gl.FLOAT; // the data in the buffer is 32bit floats
             const normalize = false; // don't normalize
