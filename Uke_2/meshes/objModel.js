@@ -15,8 +15,6 @@ function ObjModel(data)
     self.spin = false;
     self.spinIncrement = 1;
 
-    self.texture = null;
-
     self.drawType = 4;
     self.faceCount = self.faceList.length;
 	self.offset = 0;
@@ -55,7 +53,7 @@ function ObjModel(data)
        
         buffers = self.initBuffer(gl);
 
-        console.log(self);
+        //console.log(self);
 		if(self.vertexNormalList != null){
             const numComponents = 3; // pull out 3 values per iteration
             const type = gl.FLOAT; // the data in the buffer is 32bit floats
@@ -84,10 +82,10 @@ function ObjModel(data)
             gl.enableVertexAttribArray(programInfo.attribLocations.vertexPosition);
         }
 
-        if(self.textureCoords != null && self.texture != null)
+        if(self.textureCoords != null)
         {
             // Tell the shader we bound the texture to texture unit 0
-            gl.uniform1i(programInfo.uniformLocations.texture, gl.TEXTURE0);
+            //gl.uniform1i(programInfo.uniformLocations.texture, gl.TEXTURE0);
             
 			const num = 2; // every coordinate composed of 2 values
 			const type = gl.FLOAT; // the data in the buffer is 32 bit float

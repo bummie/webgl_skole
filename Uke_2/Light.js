@@ -1,7 +1,7 @@
 function Light(gl)
 {
     let self = this;
-    self.position = [0, 1, 1];
+    self.position = [0, 0, 1];
     //self.rotation = [0, 0, 0];
     self.scale = [1, 1, 1];
 
@@ -10,7 +10,7 @@ function Light(gl)
     self.zFar = 100.0;
 
     self.ambientLight = [0.3, 0.3, 0.3];
-    self.directionalVector = [0.85, 0.8, 0.75];
+    self.directionalVector = [0.2, 0, 1];
     self.directionalLightColor = [1, 1, 1];
 
     self.projectionMatrix = mat4.create();
@@ -52,8 +52,8 @@ function Light(gl)
 
         gl.bindTexture(gl.TEXTURE_2D, self.shadowMap);
  
-        gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA,  self.textureWidth, self.textureHeight, 0, gl.RGBA, gl.UNSIGNED_BYTE, null);
-		//gl.texImage2D(gl.TEXTURE_2D, 0, gl.DEPTH_COMPONENT,  self.textureWidth, self.textureHeight, 0, gl.DEPTH_COMPONENT, gl.UNSIGNED_SHORT, null);
+        //gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA,  self.textureWidth, self.textureHeight, 0, gl.RGBA, gl.UNSIGNED_BYTE, null);
+	    gl.texImage2D(gl.TEXTURE_2D, 0, gl.DEPTH_COMPONENT,  self.textureWidth, self.textureHeight, 0, gl.DEPTH_COMPONENT, gl.UNSIGNED_SHORT, null);
 
         gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR);
         gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE);
@@ -62,7 +62,7 @@ function Light(gl)
         self.frameBufferObject = gl.createFramebuffer();
         gl.bindFramebuffer(gl.FRAMEBUFFER, self.frameBufferObject);
         
-        //gl.framebufferTexture2D(gl.FRAMEBUFFER, gl.DEPTH_ATTACHMENT, gl.TEXTURE_2D, self.shadowMap, 0);
-		gl.framebufferTexture2D(gl.FRAMEBUFFER, gl.COLOR_ATTACHMENT0, gl.TEXTURE_2D, self.shadowMap, 0);
+        gl.framebufferTexture2D(gl.FRAMEBUFFER, gl.DEPTH_ATTACHMENT, gl.TEXTURE_2D, self.shadowMap, 0);
+		//gl.framebufferTexture2D(gl.FRAMEBUFFER, gl.COLOR_ATTACHMENT0, gl.TEXTURE_2D, self.shadowMap, 0);
     }
 }

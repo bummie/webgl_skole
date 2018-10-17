@@ -49,7 +49,7 @@ function SceneRenderer()
 		self.spawnRobot();
 
 		debugQuad = Quad();
-		debugQuad.position = [0, 0, -10];
+		debugQuad.position = [0, 0, -2.5];
 
 		requestAnimationFrame(self.update.bind(this));
 	}
@@ -122,7 +122,7 @@ function SceneRenderer()
 			gl.viewport(0, 0, self.light.textureWidth, self.light.textureHeight);
 
 			self.camera.updateProjectionMatrix(gl);
-			gl.uniformMatrix4fv(shadowProgramInfo.uniformLocations.projectionMatrix, false, self.camera.projectionMatrix);
+			gl.uniformMatrix4fv(shadowProgramInfo.uniformLocations.projectionMatrix, false, self.light.projectionMatrix);
 			
 			self.nodeRoot.draw(gl, shadowProgramInfo);
 		}
@@ -147,10 +147,15 @@ function SceneRenderer()
 			gl.uniformMatrix4fv(programInfo.uniformLocations.projectionMatrix, false, self.camera.projectionMatrix);
 			self.updateLightData();
 			
-			//self.nodeRoot.draw(gl, programInfo);
+			self.nodeRoot.draw(gl, programInfo);
+		}
 
+		// Draw debug
+		{
 			gl.useProgram(debugProgramInfo.program);
 			gl.uniformMatrix4fv(debugProgramInfo.uniformLocations.projectionMatrix, false, self.camera.projectionMatrix);
+			gl.uniform1i(debugProgramInfo.uniformLocations.texture, 0);
+
 			debugQuad.draw(self.nodeRoot, gl, debugProgramInfo);
 		}
 
