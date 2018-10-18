@@ -38,6 +38,6 @@ const vertShader = `
         vLighting = uAmbientLight + (uDirectionalLightColor * directional);
 
         vTextureCoord = aTextureCoord;
-        vShadowCoord = uShadowMatrix * uModelViewMatrix * aVertexPosition;
+        vShadowCoord = (uShadowMatrix * uModelViewMatrix * aVertexPosition);
     }
   `;

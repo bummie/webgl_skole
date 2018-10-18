@@ -7,14 +7,18 @@ const fragImageShader = `
 
     precision highp float;
 
+    float LinearizeDepth(in vec2 uv)
+    {
+        float zNear = 1.0;    // TODO: Replace by the zNear of your perspective projection
+        float zFar  = 100.0; // TODO: Replace by the zFar  of your perspective projection
+        float depth = texture2D(uTexture, uv).x;
+        return (2.0 * zNear) / (zFar + zNear - depth * (zFar - zNear));
+    }
+
     void main() 
     {
-        float n = 1.0;
-        float f = 10.0;
-        float z = texture2D(uTexture, vTextureCoord.st).x;
-        float grey = (2.0 * n) / (f + n - z*(f-n));
-        vec4 color = vec4(grey, grey, grey, 1.0);
-        gl_FragColor = color;
+        float c = LinearizeDepth(vTextureCoord);
+        gl_FragColor = vec4(c, c, c, 1.0);
 
         //gl_FragColor = texture2D(uTexture, vTextureCoord); // vec4(1.0, 0, 0, 1.0); //
     }

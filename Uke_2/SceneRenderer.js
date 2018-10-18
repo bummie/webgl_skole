@@ -108,7 +108,7 @@ function SceneRenderer()
 	{
 		// Render to shadow map
 		{			
-			self.light.createShadowMap(gl);
+			self.light.createShadowMap(gl, depthExt);
 			gl.bindFramebuffer(gl.FRAMEBUFFER, self.light.frameBufferObject);
 
 			gl.useProgram(shadowProgramInfo.program);

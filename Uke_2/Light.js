@@ -6,7 +6,7 @@ function Light(gl)
     self.scale = [1, 1, 1];
 
     self.fov = 45;
-    self.zNear = 0.1;
+    self.zNear = 1.0;
     self.zFar = 100.0;
 
     self.ambientLight = [0.3, 0.3, 0.3];
@@ -32,8 +32,8 @@ function Light(gl)
 		const aspect = self.textureWidth / self.textureHeight;
 
         mat4.identity(self.projectionMatrix);
-		//mat4.perspective(self.projectionMatrix, fieldOfView, aspect, self.zNear, self.zFar);
-        mat4.ortho(self.projectionMatrix, -self.scaleOrtho, self.scaleOrtho, -self.scaleOrtho, self.scaleOrtho, self.zNear, self.zFar);
+		mat4.perspective(self.projectionMatrix, fieldOfView, aspect, self.zNear, self.zFar);
+        //mat4.ortho(self.projectionMatrix, -self.scaleOrtho, self.scaleOrtho, -self.scaleOrtho, self.scaleOrtho, self.zNear, self.zFar);
 
         /*X*/ mat4.rotate(self.projectionMatrix, self.projectionMatrix, glMatrix.toRadian(self.directionalVector[0]), [1, 0, 0]);
         /*Y*/ mat4.rotate(self.projectionMatrix, self.projectionMatrix, glMatrix.toRadian(self.directionalVector[1]), [0, 1, 0]);
@@ -47,7 +47,7 @@ function Light(gl)
     /**
      * Creates the shadowmap texture in shadowMap
      */
-    self.createShadowMap = function(gl)
+    self.createShadowMap = function(gl, ext)
     {
         if(self.shadowMap != null) { return; }
 
@@ -56,7 +56,7 @@ function Light(gl)
         gl.bindTexture(gl.TEXTURE_2D, self.shadowMap);
  
         //gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA,  self.textureWidth, self.textureHeight, 0, gl.RGBA, gl.UNSIGNED_BYTE, null);
-	    gl.texImage2D(gl.TEXTURE_2D, 0, gl.DEPTH_COMPONENT,  self.textureWidth, self.textureHeight, 0, gl.DEPTH_COMPONENT, gl.UNSIGNED_SHORT, null);
+	    gl.texImage2D(gl.TEXTURE_2D, 0, gl.DEPTH_COMPONENT,  self.textureWidth, self.textureHeight, 0, gl.DEPTH_COMPONENT, gl.UNSIGNED_INT, null);
 
         gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR);
         gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE);
