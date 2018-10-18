@@ -1,16 +1,16 @@
 function Light(gl)
 {
     let self = this;
-    self.position = [0, 0, 1];
+    self.position = [0, -2, 1];
     //self.rotation = [0, 0, 0];
     self.scale = [1, 1, 1];
 
     self.fov = 45;
-    self.zNear = 1.0;
+    self.zNear = 0.1;
     self.zFar = 100.0;
 
     self.ambientLight = [0.3, 0.3, 0.3];
-    self.directionalVector = [0.2, 0, 1];
+    self.directionalVector = [0.4, 0.2, 0];
     self.directionalLightColor = [1, 1, 1];
 
     self.projectionMatrix = mat4.create();
@@ -21,7 +21,7 @@ function Light(gl)
     self.shadowMap = null; 
     self.frameBufferObject = null; 
 
-    self.scaleOrtho = 3;
+    self.scaleOrtho = 4;
 
     /**
      * Updates the projection matrix with new translation, rotation, scale values
@@ -32,12 +32,12 @@ function Light(gl)
 		const aspect = self.textureWidth / self.textureHeight;
 
         mat4.identity(self.projectionMatrix);
-		mat4.perspective(self.projectionMatrix, fieldOfView, aspect, self.zNear, self.zFar);
-        //mat4.ortho(self.projectionMatrix, -self.scaleOrtho, self.scaleOrtho, -self.scaleOrtho, self.scaleOrtho, self.zNear, self.zFar);
+		//mat4.perspective(self.projectionMatrix, fieldOfView, aspect, self.zNear, self.zFar);
+        mat4.ortho(self.projectionMatrix, -self.scaleOrtho, self.scaleOrtho, -self.scaleOrtho, self.scaleOrtho, self.zNear, self.zFar);
 
-        /*X*/ mat4.rotate(self.projectionMatrix, self.projectionMatrix, glMatrix.toRadian(self.directionalVector[0]), [1, 0, 0]);
-        /*Y*/ mat4.rotate(self.projectionMatrix, self.projectionMatrix, glMatrix.toRadian(self.directionalVector[1]), [0, 1, 0]);
-        /*Z*/ mat4.rotate(self.projectionMatrix, self.projectionMatrix, glMatrix.toRadian(self.directionalVector[2]), [0, 0, 1]);
+        /*X*/ mat4.rotate(self.projectionMatrix, self.projectionMatrix, self.directionalVector[0], [1, 0, 0]);
+        /*Y*/ mat4.rotate(self.projectionMatrix, self.projectionMatrix, self.directionalVector[1], [0, 1, 0]);
+        /*Z*/ mat4.rotate(self.projectionMatrix, self.projectionMatrix, self.directionalVector[2], [0, 0, 1]);
 
         mat4.scale(self.projectionMatrix, self.projectionMatrix, self.scale);
 

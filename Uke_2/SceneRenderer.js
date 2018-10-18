@@ -122,7 +122,6 @@ function SceneRenderer()
 			self.light.updateProjectionMatrix(gl);
 			gl.viewport(0, 0, self.light.textureWidth, self.light.textureHeight);
 
-			self.camera.updateProjectionMatrix(gl);
 			gl.uniformMatrix4fv(shadowProgramInfo.uniformLocations.projectionMatrix, false, self.light.projectionMatrix);
 			
 			self.nodeRoot.draw(gl, shadowProgramInfo);
