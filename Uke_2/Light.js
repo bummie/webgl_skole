@@ -16,8 +16,8 @@ function Light(gl)
     self.projectionMatrix = mat4.create();
     self.rotationDirection = [0, 0, -1];
 
-    self.textureWidth = 256;
-    self.textureHeight = 256;
+    self.textureWidth = 512;
+    self.textureHeight = 512;
     self.shadowMap = null; 
     self.frameBufferObject = null; 
 

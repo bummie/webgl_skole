@@ -21,6 +21,14 @@ const vertShader = `
     varying highp vec2 vTextureCoord;
     varying highp vec4 vShadowCoord;
     
+
+    const mat4 textureConvertCoords = mat4(
+        0.5, 0.0, 0.0, 0.0,
+        0.0, 0.5, 0.0, 0.0,
+        0.0, 0.0, 0.5, 0.0,
+        0.5, 0.5, 0.5, 1.0
+        );
+
     void main(void) 
     {
 		vec4 position = uProjectionMatrix * uModelViewMatrix * aVertexPosition;
@@ -38,6 +46,6 @@ const vertShader = `
         vLighting = uAmbientLight + (uDirectionalLightColor * directional);
 
         vTextureCoord = aTextureCoord;
-        vShadowCoord = (uShadowMatrix * uModelViewMatrix * aVertexPosition);
+        vShadowCoord = textureConvertCoords * (uShadowMatrix * uModelViewMatrix * aVertexPosition);
     }
   `;
