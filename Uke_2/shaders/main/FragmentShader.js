@@ -6,6 +6,7 @@ const fragShader = `
 	varying highp vec3 vLighting;
 	varying highp vec2 vTextureCoord;
     varying highp vec4 vShadowCoord;
+    varying highp vec3 vAmbientLight;
 
     precision highp float;
 
@@ -16,7 +17,7 @@ const fragShader = `
         if ( texture2D(uTexture, vShadowCoord.xy).x < (vShadowCoord.z - bias) )
         {
             
-            gl_FragColor = vec4(0.1, 0.1, 0.1, 1.0);
+            gl_FragColor = vec4(vAmbientLight, 1.0);
             return;
         }
 

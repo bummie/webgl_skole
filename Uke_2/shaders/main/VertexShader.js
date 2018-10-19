@@ -17,7 +17,8 @@ const vertShader = `
 	uniform highp vec4 uColor;
 
 	varying lowp vec4 vColor;
-	varying highp vec3 vLighting;
+    varying highp vec3 vLighting;
+    varying highp vec3 vAmbientLight;
     varying highp vec2 vTextureCoord;
     varying highp vec4 vShadowCoord;
     
@@ -44,6 +45,7 @@ const vertShader = `
   
         highp float directional = max(dot(transformedNormal.xyz, directionalVectorNormalized), 0.0);
         vLighting = uAmbientLight + (uDirectionalLightColor * directional);
+        vAmbientLight = uAmbientLight;
 
         vTextureCoord = aTextureCoord;
         vShadowCoord = textureConvertCoords * (uShadowMatrix * uModelViewMatrix * aVertexPosition);
