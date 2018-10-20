@@ -10,13 +10,11 @@ const fragShader = `
 
     precision highp float;
 
-
     void main() 
     {
         float bias = 0.005;
         if ( texture2D(uTexture, vShadowCoord.xy).x < (vShadowCoord.z - bias) )
         {
-            
             gl_FragColor = vec4(vAmbientLight, 1.0);
             return;
         }

@@ -118,10 +118,10 @@ function SceneRenderer()
 
 			gl.useProgram(shadowProgramInfo.program);
 
-			gl.clearColor(0.1, 0.1, 0.1, 1.0); // Clear to black, fully opaque
-			gl.clearDepth(1.0); // Clear everything
-			gl.enable(gl.DEPTH_TEST); // Enable depth testing
-			gl.depthFunc(gl.LEQUAL); // Near things obscure far things
+			gl.clearColor(0.1, 0.1, 0.1, 1.0); 
+			gl.clearDepth(1.0); 
+			gl.enable(gl.DEPTH_TEST); 
+			gl.depthFunc(gl.LEQUAL); 
 			gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
 
 			self.light.updateProjectionMatrix(gl);
@@ -140,10 +140,10 @@ function SceneRenderer()
 			gl.useProgram(programInfo.program);
 			gl.bindTexture(gl.TEXTURE_2D, self.light.shadowMap);
 
-			gl.clearColor(0.1, 0.1, 0.1, 1.0); // Clear to black, fully opaque
-			gl.clearDepth(1.0); // Clear everything
-			gl.enable(gl.DEPTH_TEST); // Enable depth testing
-			gl.depthFunc(gl.LEQUAL); // Near things obscure far things
+			gl.clearColor(0.1, 0.1, 0.1, 1.0); 
+			gl.clearDepth(1.0); 
+			gl.enable(gl.DEPTH_TEST); 
+			gl.depthFunc(gl.LEQUAL); 
 			gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
 			
 			gl.viewport(0, 0, gl.canvas.width, gl.canvas.height);
@@ -334,7 +334,6 @@ function SceneRenderer()
 
 		// Create a 2D canvas to store the result 
 		var canvas = document.getElementById('debugCanvas');
-
 		var context = canvas.getContext('2d');
 
 		// Copy the pixels to a 2D canvas

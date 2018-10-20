@@ -22,12 +22,12 @@ const vertShader = `
     varying highp vec2 vTextureCoord;
     varying highp vec4 vShadowCoord;
     
-    const mat4 textureConvertCoords = mat4(
+    const mat4 worldToTextureCoords = mat4(
         0.5, 0.0, 0.0, 0.0,
         0.0, 0.5, 0.0, 0.0,
         0.0, 0.0, 0.5, 0.0,
         0.5, 0.5, 0.5, 1.0
-        );
+    );
 
     void main(void) 
     {
@@ -47,6 +47,6 @@ const vertShader = `
         vAmbientLight = uAmbientLight;
 
         vTextureCoord = aTextureCoord;
-        vShadowCoord = textureConvertCoords * (uShadowMatrix * uModelViewMatrix * aVertexPosition);
+        vShadowCoord = worldToTextureCoords * (uShadowMatrix * uModelViewMatrix * aVertexPosition);
     }
   `;
