@@ -46,7 +46,12 @@ function SceneRenderer()
 		ui = new UIHandler(this);
 		ui.addListeners();
 
-		self.spawnRobot();
+		for(let i = 0; i < 3; i++)
+		{
+			self.spawnRobot();
+		}
+		
+		self.spawnLightDemoScene();
 
 		debugQuad = Quad();
 		debugQuad.position = [0, 0, -2.5];
@@ -235,10 +240,10 @@ function SceneRenderer()
 
 		// Torso
 		torso.Object.scale[2] = .5;
-		torso.Object.position[2] = -15;
+		torso.Object.position = [randomRange(-8, 9), 0, randomRange(-35, -2)];
 
 		// Head
-		head.Object.position[1] = 2.5;
+		head.Object.position[1] = 3;
 		head.Object.scale[0] = .5;
 		head.Object.scale[1] = .5;
 		head.Object.color = [.8, 0, .2, 1];
@@ -248,25 +253,27 @@ function SceneRenderer()
 		leg1.Object.position[1] = -2;
 		leg1.Object.scale[0] = .25;
 		leg1.Object.scale[2] = .25;
+		leg1.Object.color = [0.0, 0.3, 1.0, 1]
 
 		leg2.Object.position[0] = 2;
 		leg2.Object.position[1] = -2;
 		leg2.Object.scale[0] = .25;
 		leg2.Object.scale[2] = .25;
+		leg2.Object.color = [0.0, 0.3, 0.9, 1]
 
 		// Arms
 		arm1.Object.position[1] = -2;
-		//arm1.Object.position[1] = -2;
 		arm1.Object.rotation[2] = 90;
 		arm1.Object.scale[0] = .25;
 		arm1.Object.scale[2] = .25;
+		arm1.Object.color = [0.0, 1.0, 0.0, 1]
 
 		arm2.Object.position[1] = 2;
-		//arm2.Object.position[1] = -2;
 		arm2.Object.rotation[2] = 90;
 		arm2.Object.scale[0] = .25;
 		arm2.Object.scale[2] = .25;
 		arm2.Object.color = [0.0, 1.0, 0.0, 1]
+
 		// Spawn to scene
 		spawnObject(torso, "Robot");
 		spawnObject(head, "Cube");
@@ -274,6 +281,42 @@ function SceneRenderer()
 		spawnObject(leg2, "Cube");
 		spawnObject(arm1, "Cube");
 		spawnObject(arm2, "Cube");
+	}
+
+	/**
+	 * Spawns objects to scene
+	 * Room yo
+	 */
+	self.spawnLightDemoScene = function()
+	{
+		let floor = new Node(Cube(), self.nodeRoot);
+		floor.Object.scale = [10, .1, 10];
+		floor.Object.position = [0, -30, -1];
+		floor.Object.color = [0.3, 0.3, 0.3, 1.0];
+
+		let wallRight = new Node(Cube(), self.nodeRoot);
+		wallRight.Object.scale = [10, .1, 10];
+		wallRight.Object.position = [0.7, -100, -1];
+		wallRight.Object.rotation = [0, 0, 90];
+		wallRight.Object.color = [0.0, 0.3, 0.6, 1.0];
+
+		let wallLeft = new Node(Cube(), self.nodeRoot);
+		wallLeft.Object.scale = [10, .1, 10];
+		wallLeft.Object.position = [0.7, 100, -1];
+		wallLeft.Object.rotation = [0, 0, 90];
+		wallLeft.Object.color = [0.0, 0.3, 0.6, 1.0];
+
+		let wallBack = new Node(Cube(), self.nodeRoot);
+		wallBack.Object.scale = [10, .1, 10];
+		wallBack.Object.position = [0.7, -200, 0];
+		wallBack.Object.rotation = [0, 90, 90];
+		wallBack.Object.color = [0.0, 0.3, 0.6, 1.0];
+
+
+		spawnObject(floor, "Floor");
+		//spawnObject(wallRight, "wallRight");
+		//spawnObject(wallLeft, "wallLeft");
+		spawnObject(wallBack, "wallBack");
 	}
 
 	/**
@@ -304,6 +347,11 @@ function SceneRenderer()
 
 		context.putImageData(imageData, 0, 0);
 		context.scale(1, -1);
+	}
+
+	function randomRange(min, max) 
+	{
+		return Math.floor(Math.random() * (max - min + 1)) + min;
 	}
 
 }

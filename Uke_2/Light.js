@@ -1,7 +1,7 @@
 function Light(gl)
 {
     let self = this;
-    self.position = [0, 0, 0];
+    self.position = [0, 1.5, 1];
     //self.rotation = [0, 0, 0];
     self.scale = [1, 1, 1];
 
@@ -10,7 +10,7 @@ function Light(gl)
     self.zFar = 100.0;
 
     self.ambientLight = [0.1, 0.1, 0.1];
-    self.directionalVector = [0, 0, 1];
+    self.directionalVector = [0, 0.27, 1];
     self.directionalLightColor = [1, 1, 1];
 
     self.projectionMatrix = mat4.create();
@@ -21,7 +21,7 @@ function Light(gl)
     self.shadowMap = null; 
     self.frameBufferObject = null; 
 
-    self.scaleOrtho = 8;
+    self.scaleOrtho = 10;
 
     /**
      * Updates the projection matrix with new translation, rotation, scale values

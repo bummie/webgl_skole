@@ -22,7 +22,6 @@ const vertShader = `
     varying highp vec2 vTextureCoord;
     varying highp vec4 vShadowCoord;
     
-
     const mat4 textureConvertCoords = mat4(
         0.5, 0.0, 0.0, 0.0,
         0.0, 0.5, 0.0, 0.0,
